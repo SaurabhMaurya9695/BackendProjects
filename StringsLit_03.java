@@ -1,4 +1,4 @@
-public class StringsLit {
+public class StringsLit_03 {
     public static void main(String[] args) {
 
         /*
