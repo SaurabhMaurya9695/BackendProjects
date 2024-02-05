@@ -13,7 +13,7 @@ class Movie{
 
 
 
-public class swapGames_05 {
+public class SwapGames_05 {
     public static void main(String[] args) {
         Movie m1 = new Movie() ;
         m1.setDuration(120);
