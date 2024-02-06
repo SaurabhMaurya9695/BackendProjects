@@ -24,7 +24,7 @@ public class SwapGames_05 {
         
         System.out.println("Before Swapping");
         System.out.println(m1.getDuration() + " " + m2.getDuration());
-        swap(m1 , m2);
+        // swap(m1 , m2);
         System.out.println("After Swapping");
         System.out.println(m1.getDuration() + " " + m2.getDuration());
     }
