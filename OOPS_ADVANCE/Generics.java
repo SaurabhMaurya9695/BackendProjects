@@ -1,6 +1,7 @@
 package OOPS_ADVANCE;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 // class Student{
 //     private String name ;
@@ -41,6 +42,10 @@ public class Generics {
         // lst.add(20);
         // lst.add(30);
 
+
+
+        // ``````````````````````````````````````````````````````````````````````````````````````````````
+
         // ArrayList<Object> lst = new ArrayList<>();
         // // object is a parent class so you can inject all type of data whithin it 
         // lst.add(10);
@@ -56,41 +61,56 @@ public class Generics {
         
         // System.out.println(lst);
 
-        Object [] obj = new Object[10];
-        obj[0] = 10 ; // premitive -> it is written as a premitive but behind the scene in backend it
-        // is written as new Integer(10);
-        obj[1] = new Integer(8); // wrapper
-        // what is the main differnce between above two syntaxes ?
 
-        obj[2] = "Raunak"; // string literal -> we have String Constant Poll (SCP);
-        obj[3] = new StringBuilder("Raunak"); // string builder 
-        // what is the main differnce between above two syntaxes ?
 
-        System.out.println(obj); // address or hashValue 
+        // ``````````````````````````````````````````````````````````````````````````````````````````````
 
+
+        // Object [] obj = new Object[10];
+        // obj[0] = 10 ; // premitive -> it is written as a premitive but behind the scene in backend it
+        // // is written as new Integer(10);
+        // obj[1] = new Integer(8); // wrapper
+        // // what is the main differnce between above two syntaxes ?
+
+        // obj[2] = "Raunak"; // string literal -> we have String Constant Poll (SCP);
+        // obj[3] = new StringBuilder("Raunak"); // string builder 
+        // // what is the main differnce between above two syntaxes ?
+
+        // System.out.println(obj); // address or hashValue 
+
+        // // for(int i = 0 ; i< obj.length ; i ++){
+        // //     System.out.println(obj[i]);
+        // // }
+        
+        // // ((StringBuilder)obj[2]).append("world"); // downcasting 
+
+        // if(obj[3] instanceof StringBuilder){ // downcasting checking
+        //     ((StringBuilder)obj[3]).append("world");
+        // }
+        // else{
+        //     System.out.println("This is not possible");
+        // }
+
+        
         // for(int i = 0 ; i< obj.length ; i ++){
         //     System.out.println(obj[i]);
         // }
+
+        // ``````````````````````````````````````````````````````````````````````````````````````````````
         
-        // ((StringBuilder)obj[2]).append("world"); // downcasting 
+        // ArrayList arr = new ArrayList<>();
+        // // if we didn't specify the type then by default it takes an object 
+        // arr.add(10);
+        // arr.add(10.0);
+        // arr.add(10.000);
+        // arr.add("hello ");
 
-        if(obj[2] instanceof StringBuilder){ // downcasting checking
-            ((StringBuilder)obj[2]).append("world");
-        }
-        else{
-            System.out.println("This is not possible");
-        }
-
-        
-        for(int i = 0 ; i< obj.length ; i ++){
-            System.out.println(obj[i]);
-        }
+        // System.out.println(arr);
 
 
+        // ``````````````````````````````````````````````````````````````````````````````````````````````
 
-
-
-
-
+        // Object obj = "Hello";
+        // System.out.println(obj.getClass());
     }
 }
