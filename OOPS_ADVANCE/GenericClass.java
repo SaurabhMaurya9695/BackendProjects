@@ -3,7 +3,7 @@ package OOPS_ADVANCE;
 
 // this is a generic class of Rectangle , and this class can accept any dataType
 
-class Rectangle<T>{
+class Rectangle<T extends Number>{
     private T length ;
     private T breath ;
 
@@ -47,10 +47,12 @@ public class GenericClass {
         r2.setLength(20.0);
         System.out.println(r2.toString());
 
-        Rectangle<String> r3 =  new Rectangle<>() ;
-        r3.setBreath("Hello");
-        r3.setLength("World");
-        System.out.println(r3.toString());
+        // Rectangle<String> r3 =  new Rectangle<>() ;
+        // r3.setBreath("Hello");
+        // r3.setLength("World");
+        // System.out.println(r3.toString());
+
+        // if we want to fix Type should be alwaya a number .
 
     }
 }
