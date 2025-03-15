@@ -1,0 +1,22 @@
+<assembly>
+    <id>${buildNumber}</id>
+    <formats>
+        <format>zip</format>
+    </formats>
+    <includeBaseDirectory>false</includeBaseDirectory>
+    <dependencySets>
+        <dependencySet>
+            <useProjectArtifact>false</useProjectArtifact>
+            <outputFileNameMapping>lib/plugin</outputFileNameMapping>
+        </dependencySet>
+    </dependencySets>
+    <fileSets>
+        <fileSet>
+            <outputDirectory>conf</outputDirectory>
+            <includes>
+                <include>*.txt</include>
+            </includes>
+            <directory>target/conf</directory>
+        </fileSet>
+    </fileSets>
+</assembly>
