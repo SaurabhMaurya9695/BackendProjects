@@ -4,17 +4,20 @@
         <format>zip</format>
     </formats>
     <includeBaseDirectory>false</includeBaseDirectory>
+
     <dependencySets>
         <dependencySet>
             <useProjectArtifact>false</useProjectArtifact>
-            <outputFileNameMapping>lib/plugin</outputFileNameMapping>
+            <outputFileNameMapping>backendProject/${artifact.artifactId}.${artifact.extension}</outputFileNameMapping>
         </dependencySet>
     </dependencySets>
+
     <fileSets>
         <fileSet>
             <outputDirectory>conf</outputDirectory>
             <includes>
                 <include>*.txt</include>
+                <include>target/*.jar</include>
             </includes>
             <directory>target/conf</directory>
         </fileSet>
