@@ -1,10 +1,16 @@
 package com.backend.design.principles;
 
+import com.backend.design.pattern.singelton.Singleton;
+
 public class App {
+
     public App() {
 
     }
-    public void sum(int a, int b) {
-        System.out.println(a + b);
+
+    public void checkHashCode() {
+        Singleton Instance = Singleton.getInstance();
+        System.out.println(Instance.hashCode());
+
     }
 }

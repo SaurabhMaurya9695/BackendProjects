@@ -21,15 +21,24 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- Design Pattern dependencies -->
         <dependency>
             <groupId>com.backend.design.pattern</groupId>
             <artifactId>design-pattern</artifactId>
             <version>1.0.0-SNAPSHOT</version>
         </dependency>
 
+        <!-- Design Principles dependencies -->
         <dependency>
             <groupId>com.backend.design.principles</groupId>
             <artifactId>design-principles</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- Entry Point dependencies -->
+        <dependency>
+            <groupId>com.backend</groupId>
+            <artifactId>entry-point</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -77,6 +86,7 @@
                 </executions>
             </plugin>
 
+            <!-- Executable Jar  -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
@@ -89,7 +99,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.backend.design.pattern.Test</mainClass>
+                                    <mainClass>com.backend.EntryPoint</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

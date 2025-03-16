@@ -17,29 +17,5 @@
 
     <dependencies>
         <!--  TODO - ADDED DESIGN-PRINCIPLES   -->
-        <dependency>
-            <groupId>com.backend.design.principles</groupId>
-            <artifactId>design-principles</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
     </dependencies>
-
-    <!--  added since the main entry point is here  -->
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.2</version>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <mainClass>com.backend.design.pattern.Test</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
-            </plugin>
-        </plugins>
-    </build>
-
 </project>

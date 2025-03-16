@@ -5,22 +5,28 @@
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <!-- Parent Project -->
-  <parent>
-    <groupId>com.backend</groupId>
-    <artifactId>BackendProjects</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
+    <!-- Parent Project -->
+    <parent>
+        <groupId>com.backend</groupId>
+        <artifactId>BackendProjects</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
 
-  <groupId>com.backend.design.principles</groupId>
-  <artifactId>design-principles</artifactId>
-  <name>Design-Principles</name>
-  <packaging>jar</packaging>
+    <groupId>com.backend.design.principles</groupId>
+    <artifactId>design-principles</artifactId>
+    <name>Design-Principles</name>
+    <packaging>jar</packaging>
 
-  <dependencies>
-    <!--TODO - NO DEPENDECIES-->
-  </dependencies>
+    <dependencies>
+        <!--TODO - NO DEPENDECIES-->
+        <dependency>
+            <groupId>com.backend.design.pattern</groupId>
+            <artifactId>design-pattern</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+    </dependencies>
 
 </project>
