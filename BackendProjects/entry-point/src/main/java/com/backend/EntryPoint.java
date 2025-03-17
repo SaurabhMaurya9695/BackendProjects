@@ -1,18 +1,20 @@
 package com.backend;
 
-import com.backend.design.pattern.singelton.Singleton;
-import com.backend.design.principles.App;
+import com.backend.design.pattern.randomQuestion.constants.EntityController;
+import com.backend.design.pattern.randomQuestion.constants.TypeOfEntity;
+
+import java.io.IOException;
 
 public class EntryPoint {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException, ClassNotFoundException {
+        // FIXME - SingletonEntryPoint.exampleSerialization();
 
-        Singleton _INSTANCE = Singleton.getInstance();
-        System.out.println(_INSTANCE.hashCode());
-
-        App app = new App();
-        app.checkHashCode();
-
-
+        /** FIXME - FactoryDesignPattern
+             EntityController controller = new EntityController();
+             controller.handle(TypeOfEntity.ARTIST);
+             controller.handle(TypeOfEntity.STUDIO);
+             controller.handle(TypeOfEntity.DESIGNER);
+         */
     }
 }
