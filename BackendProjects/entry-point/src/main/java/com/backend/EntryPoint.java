@@ -1,5 +1,7 @@
 package com.backend;
 
+import com.backend.design.pattern.factory.OperatingSystem;
+import com.backend.design.pattern.factory.OperatingSystemFactory;
 import com.backend.design.pattern.randomQuestion.constants.EntityController;
 import com.backend.design.pattern.randomQuestion.constants.TypeOfEntity;
 import com.backend.design.pattern.sqlQueryOptimization.FetchingData;
@@ -12,7 +14,7 @@ public class EntryPoint {
 
     public static void main(String[] args) throws IOException, ClassNotFoundException {
 
-        // TODO - SingletonEntryPoint.exampleSerialization();
+        /* TODO - SingletonEntryPoint.exampleSerialization();
 
         /** TODO - FactoryDesignPattern
              EntityController controller = new EntityController();
@@ -26,15 +28,23 @@ public class EntryPoint {
              sqlConnection.MakeConnection();
          */
 
-        // write a method where we can just pass the userId and based on that we can fetch
+        /*
+         TODO - write a method where we can just pass the userId and based on that we can fetch
+          Fetch all liked entities for user 1
+          FetchingData.getLikedEntities(1, null);
+        */
 
-        // Fetch all liked entities for user 1
-        FetchingData.getLikedEntities(1, null);
+        /* TODO - FactoryDesignPattern
+            OperatingSystemFactory osFactory = new OperatingSystemFactory();
+            OperatingSystem windowsOperatingSystem = osFactory.getOperatingSystem("1.0.0.", "x64", "windows");
+            windowsOperatingSystem.deleteDirectory();
+            windowsOperatingSystem.setDirectory();
+            System.out.print("-----------------------------------------\n");
+            OperatingSystem linuxOperatingSystem = osFactory.getOperatingSystem("1.0.0.", "x64", "linux");
+            linuxOperatingSystem.deleteDirectory();
+            linuxOperatingSystem.setDirectory();
 
-        // Fetch only artists liked by user 1
-//        FetchingData.getLikedEntities(1, "ARTIST");
-//
-//        // Fetch only studios liked by user 1
-//        FetchingData.getLikedEntities(1, "STUDIO");
+         */
+
     }
 }
