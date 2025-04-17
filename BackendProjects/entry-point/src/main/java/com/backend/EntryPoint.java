@@ -1,14 +1,10 @@
 package com.backend;
 
-import com.backend.design.pattern.factory.OperatingSystem;
-import com.backend.design.pattern.factory.OperatingSystemFactory;
-import com.backend.design.pattern.randomQuestion.constants.EntityController;
-import com.backend.design.pattern.randomQuestion.constants.TypeOfEntity;
-import com.backend.design.pattern.sqlQueryOptimization.FetchingData;
-import com.backend.design.pattern.sqlQueryOptimization.MakeSqlConnection;
+import com.backend.design.pattern.AbstactFactory.MainAbstractFactoryEntryPoint;
+import com.backend.design.pattern.AbstactFactory.factory.MacFactory;
+import com.backend.design.pattern.AbstactFactory.factory.WindowsFactory;
 
 import java.io.IOException;
-import java.util.List;
 
 public class EntryPoint {
 
@@ -43,6 +39,14 @@ public class EntryPoint {
             OperatingSystem linuxOperatingSystem = osFactory.getOperatingSystem("1.0.0.", "x64", "linux");
             linuxOperatingSystem.deleteDirectory();
             linuxOperatingSystem.setDirectory();
+
+         */
+
+        /* TODO  Abstract Design Pattern
+            MainAbstractFactoryEntryPoint _factory = new MainAbstractFactoryEntryPoint(new WindowsFactory());
+            _factory.paintOs();
+            MainAbstractFactoryEntryPoint _factory = new MainAbstractFactoryEntryPoint(new MacFactory());
+            _factory.paintOs();
 
          */
 

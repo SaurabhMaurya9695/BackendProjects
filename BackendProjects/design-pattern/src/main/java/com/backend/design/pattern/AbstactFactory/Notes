@@ -1,0 +1,10 @@
+This AbstractFactoryPattern contains abstraction of some methods of FactoryDesignPatten means which of the methods
+which are common in both of them .
+
+
+1 : one os UI have button , checkbox
+2 : based on UI -> button color may can vary
+                    * such as for mac button color is black
+                    * such as for windows button color is grey
+3 : make button as interface and implement on both of them for Mac and Windows
+4 : now just used the FactoryDesign pattern to find the exact factory for both the os
