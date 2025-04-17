@@ -3,6 +3,7 @@ package com.backend;
 import com.backend.design.pattern.AbstactFactory.MainAbstractFactoryEntryPoint;
 import com.backend.design.pattern.AbstactFactory.factory.MacFactory;
 import com.backend.design.pattern.AbstactFactory.factory.WindowsFactory;
+import com.backend.design.pattern.builderPattern.Burger;
 
 import java.io.IOException;
 
@@ -49,6 +50,17 @@ public class EntryPoint {
             _factory.paintOs();
 
          */
+
+        /* TODO - BuilderDesignPattern
+            Burger burger = new Burger.BurgerBuilder()
+                                        .egg(true)
+                                        .extraCheese(true)
+                                        .mayonese(true)
+                                        .size("2")
+                                        .onion(true)
+                                         .build();
+         */
+
 
     }
 }
