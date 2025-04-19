@@ -7,6 +7,11 @@ import com.backend.design.pattern.adaptorPattern.Adaptor.GroceryItemAdaptor;
 import com.backend.design.pattern.adaptorPattern.Item1.FoodItem;
 import com.backend.design.pattern.adaptorPattern.Item2.GroceryProduct;
 import com.backend.design.pattern.adaptorPattern.SwiggyStore;
+import com.backend.design.pattern.bridgePattern.NetflixVideo;
+import com.backend.design.pattern.bridgePattern.PrimeVideo;
+import com.backend.design.pattern.bridgePattern.Video;
+import com.backend.design.pattern.bridgePattern.processor.EightKProcessor;
+import com.backend.design.pattern.bridgePattern.processor.fourKProcessor;
 import com.backend.design.pattern.builderPattern.Burger;
 import com.backend.design.pattern.prototypePattern.Vehicle;
 import com.backend.design.pattern.prototypePattern.VehicleRegistry;
@@ -27,8 +32,8 @@ public class EntryPoint {
         */
 
         /** TODO - it will create a connection to db and created a table name studio and artist
-         MakeSqlConnection sqlConnection = new MakeSqlConnection();
-         sqlConnection.MakeConnection();
+             MakeSqlConnection sqlConnection = new MakeSqlConnection();
+             sqlConnection.MakeConnection();
          */
 
         /*
@@ -87,6 +92,13 @@ public class EntryPoint {
             swiggyStore.addItems(new GroceryItemAdaptor(new GroceryProduct()));
             swiggyStore.printItems();
          */
+
+        /* TODO - Bridge Design Pattern
+            Video netflixVideos = new NetflixVideo(new EightKProcessor());
+            netflixVideos.play("teraHua.mp4");
+            Video primeVideos = new PrimeVideo(new fourKProcessor());
+            primeVideos.play("prime.mp4");
+        */
 
 
 
