@@ -3,7 +3,13 @@ package com.backend;
 import com.backend.design.pattern.AbstactFactory.MainAbstractFactoryEntryPoint;
 import com.backend.design.pattern.AbstactFactory.factory.MacFactory;
 import com.backend.design.pattern.AbstactFactory.factory.WindowsFactory;
+import com.backend.design.pattern.adaptorPattern.Adaptor.GroceryItemAdaptor;
+import com.backend.design.pattern.adaptorPattern.Item1.FoodItem;
+import com.backend.design.pattern.adaptorPattern.Item2.GroceryProduct;
+import com.backend.design.pattern.adaptorPattern.SwiggyStore;
 import com.backend.design.pattern.builderPattern.Burger;
+import com.backend.design.pattern.prototypePattern.Vehicle;
+import com.backend.design.pattern.prototypePattern.VehicleRegistry;
 
 import java.io.IOException;
 
@@ -21,8 +27,8 @@ public class EntryPoint {
         */
 
         /** TODO - it will create a connection to db and created a table name studio and artist
-             MakeSqlConnection sqlConnection = new MakeSqlConnection();
-             sqlConnection.MakeConnection();
+         MakeSqlConnection sqlConnection = new MakeSqlConnection();
+         sqlConnection.MakeConnection();
          */
 
         /*
@@ -60,6 +66,28 @@ public class EntryPoint {
                                         .onion(true)
                                          .build();
          */
+
+        /* Todo -> Prototype Model
+            VehicleRegistry vehicleRegistry = new VehicleRegistry();
+            try {
+                Vehicle vehicle = vehicleRegistry.getVehicle("TWO");
+                System.out.println("Vehicle: " + vehicle.hashCode());
+                System.out.println("Engine type : " + vehicle.getEngine());
+                System.out.println("Model type : " + vehicle.getModel());
+            } catch (CloneNotSupportedException e) {
+                throw new RuntimeException(e);
+            }
+         */
+
+
+        /* TODO -> Adaptor design pattern
+            SwiggyStore swiggyStore = new SwiggyStore();
+            swiggyStore.addItems(new FoodItem());
+            swiggyStore.addItems(new FoodItem());
+            swiggyStore.addItems(new GroceryItemAdaptor(new GroceryProduct()));
+            swiggyStore.printItems();
+         */
+
 
 
     }

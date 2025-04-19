@@ -1,0 +1,15 @@
+1 :  there is an mainApplication
+2 : app1 is sending the data in xml format and mainApplication is receiving the data in the xml format
+3 : app2 is sending / receiving data in json format
+4 : we have to send the app1 data to app2 in short we have to create an adaptor which can accept the
+    xml and convert that data into json .
+
+
+Adaptor means adapt one functionality and convert adapted functionality to a different
+
+
+1 : in the adaptor factory the code which we written
+2 : let's suppose if we have a swiggy store, then currently it delivers the items of the food/restaurant
+3 : during pandemic, swiggy is start delivering the grocery item, so in short they can't change their implementation/code
+    to deliver the grocery item, instead of that they create an adaptor which can convert the items into a
+    grocery items
