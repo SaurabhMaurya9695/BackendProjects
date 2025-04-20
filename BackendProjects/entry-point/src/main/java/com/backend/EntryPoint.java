@@ -13,6 +13,10 @@ import com.backend.design.pattern.bridgePattern.Video;
 import com.backend.design.pattern.bridgePattern.processor.EightKProcessor;
 import com.backend.design.pattern.bridgePattern.processor.fourKProcessor;
 import com.backend.design.pattern.builderPattern.Burger;
+import com.backend.design.pattern.decoratorPattern.BasePizza;
+import com.backend.design.pattern.decoratorPattern.Pizza;
+import com.backend.design.pattern.decoratorPattern.toppings.CheeseBurstTopping;
+import com.backend.design.pattern.decoratorPattern.toppings.JalepanoToppings;
 import com.backend.design.pattern.prototypePattern.Vehicle;
 import com.backend.design.pattern.prototypePattern.VehicleRegistry;
 
@@ -99,6 +103,11 @@ public class EntryPoint {
             Video primeVideos = new PrimeVideo(new fourKProcessor());
             primeVideos.play("prime.mp4");
         */
+
+        /* TODO - Decorator Design Pattern
+            Pizza pizza = new JalepanoToppings(new CheeseBurstTopping(new BasePizza()));
+            System.out.println(pizza.bake());
+         */
 
 
 
