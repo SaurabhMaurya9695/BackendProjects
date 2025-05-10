@@ -1,6 +1,8 @@
 package com.backend.dsa.atoz;
 
 import java.util.List;
+import java.util.Map;
+import java.util.PriorityQueue;
 
 public class CommonUtil {
 
@@ -57,5 +59,17 @@ public class CommonUtil {
             return list.get(list.size() - 1);
         }
         return 0;
+    }
+
+    public static void printMap(Map<?, ?> map) {
+        for (Map.Entry<?, ?> entry : map.entrySet()) {
+            System.out.println(entry.getKey() + " : " + entry.getValue());
+        }
+    }
+
+    public static void printPQ(PriorityQueue<?> pq) {
+        while (!pq.isEmpty()) {
+            System.out.print(pq.poll() + " ");
+        }
     }
 }

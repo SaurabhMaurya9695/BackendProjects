@@ -1,7 +1,6 @@
 package com.backend;
 
 import com.backend.dsa.atoz.CommonUtil;
-import com.backend.dsa.atoz.arrays.BasicOp;
 import com.backend.dsa.atoz.arrays.MaxConsecutiveOnes;
 import com.backend.dsa.atoz.arrays.MissingNumber;
 import com.backend.dsa.atoz.arrays.MoveZerosToEnd;
@@ -9,6 +8,10 @@ import com.backend.dsa.atoz.arrays.RemoveDuplicatesFromSortedArray;
 import com.backend.dsa.atoz.arrays.RotateArrayByD;
 import com.backend.dsa.atoz.arrays.SecondLargetsElement;
 import com.backend.dsa.atoz.arrays.UnionOfTwoSortedArrays;
+import com.backend.dsa.atoz.hashmapAndHeaps.FoundHighOccuringChar_01;
+import com.backend.dsa.atoz.hashmapAndHeaps.KLargestElements_03;
+import com.backend.dsa.atoz.hashmapAndHeaps.LongestConsecutiveSequence_02;
+import com.backend.dsa.atoz.hashmapAndHeaps.NearlySorted_04;
 import com.backend.dsa.atoz.sorting.BubbleSort;
 import com.backend.dsa.atoz.sorting.InsertionSort;
 import com.backend.dsa.atoz.sorting.MergeSort;
@@ -70,5 +73,32 @@ public class EntryPoint {
 
         int[] arr10 = { 1, 1, 0, 0, 0, 2, 2, 1, 1, 1, 1 };
         new MaxConsecutiveOnes(arr10);
+
+        String[] s = { "a", "b", "c", "d", "a", "a" };
+        new FoundHighOccuringChar_01(s);
+
+        int[] arr11 = { 10, 5, 9, 1, 11, 8, 6, 15, 3, 12, 2 };
+        new LongestConsecutiveSequence_02(arr11);
+
+        int[] arr12 = { 10, 5, 9, 1, 11, 8, 6, 15, 3, 12, 2 };
+        new KLargestElements_03(arr12 , 3);
+
+        int[] arr13 = {6, 5, 3, 2, 8, 10, 9};
+        int k = 3;
+        new NearlySorted_04(arr13 , k);
+
+        /* ImplementMedianFinder_05 imf = new ImplementMedianFinder_05();
+            imf.add(10);
+            imf.add(20);
+            imf.add(30);
+            imf.add(40);
+            imf.add(5);
+            imf.add(50);
+            System.out.println("removed value from pq : " + imf.remove());
+            System.out.println("removed value from pq : " + imf.remove());
+         */
+
+
+
     }
 }
