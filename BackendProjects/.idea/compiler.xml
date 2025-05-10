@@ -8,6 +8,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="design-pattern" />
         <module name="design-principles" />
+        <module name="dsa" />
         <module name="Backend-Project-dist" />
         <module name="entry-point" />
       </profile>

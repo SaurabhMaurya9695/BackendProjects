@@ -35,6 +35,13 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <!-- DSA dependencies -->
+        <dependency>
+            <groupId>com.backend.dsa</groupId>
+            <artifactId>dsa</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
         <!-- Entry Point dependencies -->
         <dependency>
             <groupId>com.backend</groupId>
@@ -99,7 +106,7 @@
                         <configuration>
                             <transformers>
                                 <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.backend.EntryPoint</mainClass>
+                                    <mainClass>com.backend.EntryPointForDesignPrinciple</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>

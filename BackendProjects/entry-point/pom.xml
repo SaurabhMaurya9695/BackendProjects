@@ -31,6 +31,12 @@
             <version>${project.parent.version}</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.backend.dsa</groupId>
+            <artifactId>dsa</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
     </dependencies>
 
     <!--  added since the main entry point is here  -->
@@ -43,7 +49,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>com.backend.EntryPoint</mainClass>
+                            <mainClass>com.backend.EntryPointForDesignPrinciple</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
