@@ -8,15 +8,21 @@ import com.backend.dsa.atoz.arrays.RemoveDuplicatesFromSortedArray;
 import com.backend.dsa.atoz.arrays.RotateArrayByD;
 import com.backend.dsa.atoz.arrays.SecondLargetsElement;
 import com.backend.dsa.atoz.arrays.UnionOfTwoSortedArrays;
+import com.backend.dsa.atoz.hashmapAndHeaps.FindCEO_08;
 import com.backend.dsa.atoz.hashmapAndHeaps.FoundHighOccuringChar_01;
 import com.backend.dsa.atoz.hashmapAndHeaps.KLargestElements_03;
 import com.backend.dsa.atoz.hashmapAndHeaps.LongestConsecutiveSequence_02;
+import com.backend.dsa.atoz.hashmapAndHeaps.MergeKSortedList_06;
 import com.backend.dsa.atoz.hashmapAndHeaps.NearlySorted_04;
+import com.backend.dsa.atoz.oa.GuideWireOA;
 import com.backend.dsa.atoz.sorting.BubbleSort;
 import com.backend.dsa.atoz.sorting.InsertionSort;
 import com.backend.dsa.atoz.sorting.MergeSort;
 import com.backend.dsa.atoz.sorting.QuickSort;
 import com.backend.dsa.atoz.sorting.SelectionSort;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class EntryPoint {
 
@@ -81,11 +87,11 @@ public class EntryPoint {
         new LongestConsecutiveSequence_02(arr11);
 
         int[] arr12 = { 10, 5, 9, 1, 11, 8, 6, 15, 3, 12, 2 };
-        new KLargestElements_03(arr12 , 3);
+        new KLargestElements_03(arr12, 3);
 
-        int[] arr13 = {6, 5, 3, 2, 8, 10, 9};
+        int[] arr13 = { 6, 5, 3, 2, 8, 10, 9 };
         int k = 3;
-        new NearlySorted_04(arr13 , k);
+        new NearlySorted_04(arr13, k);
 
         /* ImplementMedianFinder_05 imf = new ImplementMedianFinder_05();
             imf.add(10);
@@ -98,7 +104,26 @@ public class EntryPoint {
             System.out.println("removed value from pq : " + imf.remove());
          */
 
+        int[][] lst = { { 1, 2, 6 }, { 3, 4, 5, 10 }, { 8, 19 } };
+        new MergeKSortedList_06(lst);
 
+        /*
+          for (int i = 0; i < 3; i++) {
+             for (int j = 0; j < 3; j++) {
+                 for (int x = 0; x < 3; x++) {
+                    System.out.println("for {i,j,k} : " + i + " " + j + " " + x);
+                    new GuideWireOA(i, j, x); // wrong solution
+                }
+            }
+        }*/
 
+        HashMap<String, String> listOfEmployee = new HashMap<>();
+        listOfEmployee.put("A", "C");
+        listOfEmployee.put("B", "C");
+        listOfEmployee.put("C", "F");
+        listOfEmployee.put("D", "E");
+        listOfEmployee.put("E", "F");
+        listOfEmployee.put("F", "F");
+        new FindCEO_08(listOfEmployee);
     }
 }

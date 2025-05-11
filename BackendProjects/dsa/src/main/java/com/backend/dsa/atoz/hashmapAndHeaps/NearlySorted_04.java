@@ -24,5 +24,6 @@ public class NearlySorted_04 {
         while (!pq.isEmpty()) {
             System.out.print(pq.poll() + " ");
         }
+        System.out.println();
     }
 }
