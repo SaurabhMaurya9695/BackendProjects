@@ -8,13 +8,15 @@ import com.backend.dsa.atoz.arrays.RemoveDuplicatesFromSortedArray;
 import com.backend.dsa.atoz.arrays.RotateArrayByD;
 import com.backend.dsa.atoz.arrays.SecondLargetsElement;
 import com.backend.dsa.atoz.arrays.UnionOfTwoSortedArrays;
+import com.backend.dsa.atoz.hashmapAndHeaps.CheckEveryPairIsDivisibleByK_10;
+import com.backend.dsa.atoz.hashmapAndHeaps.DistinctElementInWindowK_11;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindCEO_08;
+import com.backend.dsa.atoz.hashmapAndHeaps.FindItineraryFromTickets_09;
 import com.backend.dsa.atoz.hashmapAndHeaps.FoundHighOccuringChar_01;
 import com.backend.dsa.atoz.hashmapAndHeaps.KLargestElements_03;
 import com.backend.dsa.atoz.hashmapAndHeaps.LongestConsecutiveSequence_02;
 import com.backend.dsa.atoz.hashmapAndHeaps.MergeKSortedList_06;
 import com.backend.dsa.atoz.hashmapAndHeaps.NearlySorted_04;
-import com.backend.dsa.atoz.oa.GuideWireOA;
 import com.backend.dsa.atoz.sorting.BubbleSort;
 import com.backend.dsa.atoz.sorting.InsertionSort;
 import com.backend.dsa.atoz.sorting.MergeSort;
@@ -22,7 +24,6 @@ import com.backend.dsa.atoz.sorting.QuickSort;
 import com.backend.dsa.atoz.sorting.SelectionSort;
 
 import java.util.HashMap;
-import java.util.Map;
 
 public class EntryPoint {
 
@@ -125,5 +126,24 @@ public class EntryPoint {
         listOfEmployee.put("E", "F");
         listOfEmployee.put("F", "F");
         new FindCEO_08(listOfEmployee);
+
+        HashMap<String, String> itinerary = new HashMap<>();
+        itinerary.put("chennai", "Bangalore");
+        itinerary.put("Bombay", "Delhi");
+        itinerary.put("Goa", "chennai");
+        itinerary.put("Delhi", "Goa");
+        new FindItineraryFromTickets_09(itinerary);
+
+        int[] arr14 = { 9, 7, 5, 3 };
+        int divisibleBY = 6;
+        new CheckEveryPairIsDivisibleByK_10(arr14, divisibleBY);
+
+        int[] arr15 = { 77, 22, 56, 11, 45, 35, 78, 29, 23, 55 };
+        int divisibleBYK = 10;
+        new CheckEveryPairIsDivisibleByK_10(arr15, divisibleBYK);
+
+        int[] arr16 = { 2, 5, 5, 6, 3, 2, 3, 2, 4, 5, 2, 2, 2, 2, 3, 6 };
+        int windowSize = 4;
+        new DistinctElementInWindowK_11(arr16, windowSize);
     }
 }
