@@ -9,11 +9,14 @@ import com.backend.dsa.atoz.arrays.RotateArrayByD;
 import com.backend.dsa.atoz.arrays.SecondLargetsElement;
 import com.backend.dsa.atoz.arrays.UnionOfTwoSortedArrays;
 import com.backend.dsa.atoz.hashmapAndHeaps.CheckEveryPairIsDivisibleByK_10;
+import com.backend.dsa.atoz.hashmapAndHeaps.CountAllSubarrayWithKSum_13;
 import com.backend.dsa.atoz.hashmapAndHeaps.DistinctElementInWindowK_11;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindCEO_08;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindItineraryFromTickets_09;
 import com.backend.dsa.atoz.hashmapAndHeaps.FoundHighOccuringChar_01;
 import com.backend.dsa.atoz.hashmapAndHeaps.KLargestElements_03;
+import com.backend.dsa.atoz.hashmapAndHeaps.LargestSubarrayWithSumZero_12;
+import com.backend.dsa.atoz.hashmapAndHeaps.LengthOfLargestSubarrayWithContiguousElements_14;
 import com.backend.dsa.atoz.hashmapAndHeaps.LongestConsecutiveSequence_02;
 import com.backend.dsa.atoz.hashmapAndHeaps.MergeKSortedList_06;
 import com.backend.dsa.atoz.hashmapAndHeaps.NearlySorted_04;
@@ -145,5 +148,23 @@ public class EntryPoint {
         int[] arr16 = { 2, 5, 5, 6, 3, 2, 3, 2, 4, 5, 2, 2, 2, 2, 3, 6 };
         int windowSize = 4;
         new DistinctElementInWindowK_11(arr16, windowSize);
+
+        int[] arr17 = { 15, -2, 2, -8, 1, 7, 10, 23 };
+        int[] arr18 = { 2, 10, 4, -14, -2 };
+        int[] arr19 = { -42, 12, 20, 15, 31, -4, 0, 15 };
+        new LargestSubarrayWithSumZero_12(arr17);
+        new LargestSubarrayWithSumZero_12(arr18);
+        new LargestSubarrayWithSumZero_12(arr19);
+
+        int[] arr20 = { 2, 8, -3, -5, 2, 4, 6, 1, 2, 1, -3, 4, -1, 3 };
+        int target = 0;
+        new CountAllSubarrayWithKSum_13(arr20, target);
+
+        int[] arr21 = { 1, 4, 3, 1, 1, 2 };
+        int target1 = 5;
+        new CountAllSubarrayWithKSum_13(arr21, target1);
+
+        int[] arr22 = { 9, 2, 7, 5, 6, 23, 24, 22, 23, 19, 17, 16, 18, 39, 0 };
+        new LengthOfLargestSubarrayWithContiguousElements_14(arr22);
     }
 }
