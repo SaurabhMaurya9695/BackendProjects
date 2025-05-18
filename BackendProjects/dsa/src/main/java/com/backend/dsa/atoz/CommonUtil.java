@@ -1,5 +1,6 @@
 package com.backend.dsa.atoz;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.PriorityQueue;
@@ -70,6 +71,26 @@ public class CommonUtil {
     public static void printPQ(PriorityQueue<?> pq) {
         while (!pq.isEmpty()) {
             System.out.print(pq.poll() + " ");
+        }
+    }
+
+    public static int max(int a, int b) {
+        return Math.max(a, b);
+    }
+
+    public static int min(int a, int b) {
+        return Math.min(a, b);
+    }
+
+    public static void removeCharHashMap(HashMap<Character, Integer> mp, char c) {
+        if (mp.containsKey(c)) {
+            if (mp.get(c) == 1) {
+                mp.remove(c);
+            } else {
+                mp.put(c, mp.get(c) - 1);
+            }
+        } else {
+            System.out.println("Char not found in HashMap");
         }
     }
 }

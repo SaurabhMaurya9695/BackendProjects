@@ -10,6 +10,7 @@ import com.backend.dsa.atoz.arrays.SecondLargetsElement;
 import com.backend.dsa.atoz.arrays.UnionOfTwoSortedArrays;
 import com.backend.dsa.atoz.hashmapAndHeaps.CheckEveryPairIsDivisibleByK_10;
 import com.backend.dsa.atoz.hashmapAndHeaps.CountAllSubarrayWithKSum_13;
+import com.backend.dsa.atoz.hashmapAndHeaps.CountSubstringsWithKDistinctCharacters_19;
 import com.backend.dsa.atoz.hashmapAndHeaps.DistinctElementInWindowK_11;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindCEO_08;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindItineraryFromTickets_09;
@@ -18,7 +19,10 @@ import com.backend.dsa.atoz.hashmapAndHeaps.KLargestElements_03;
 import com.backend.dsa.atoz.hashmapAndHeaps.LargestSubarrayWithSumZero_12;
 import com.backend.dsa.atoz.hashmapAndHeaps.LengthOfLargestSubarrayWithContiguousElements_14;
 import com.backend.dsa.atoz.hashmapAndHeaps.LongestConsecutiveSequence_02;
+import com.backend.dsa.atoz.hashmapAndHeaps.LongestSubstringWithKUniques_18;
+import com.backend.dsa.atoz.hashmapAndHeaps.LongestSubstringWithoutRepeatingCharacters_16;
 import com.backend.dsa.atoz.hashmapAndHeaps.MergeKSortedList_06;
+import com.backend.dsa.atoz.hashmapAndHeaps.MinimumWindowSubstring01_15;
 import com.backend.dsa.atoz.hashmapAndHeaps.NearlySorted_04;
 import com.backend.dsa.atoz.sorting.BubbleSort;
 import com.backend.dsa.atoz.sorting.InsertionSort;
@@ -164,7 +168,48 @@ public class EntryPoint {
         int target1 = 5;
         new CountAllSubarrayWithKSum_13(arr21, target1);
 
-        int[] arr22 = { 9, 2, 7, 5, 6, 23, 24, 22, 23, 19, 17, 16, 18, 39, 0 };
+        int[] arr22 = { 9, 2, 7, 5, 6, 23, 24, 22, 23, 19, 17, 16, 18, 39 };
         new LengthOfLargestSubarrayWithContiguousElements_14(arr22);
+
+        int[] arr23 = { 1, 56, 58, 57, 90, 92, 94, 93, 91, 45 };
+        new LengthOfLargestSubarrayWithContiguousElements_14(arr23);
+
+        String originalString1 = "dbaecbbabdcaafbddcabgba";
+        String matchedString1 = "abbcdc";
+        new MinimumWindowSubstring01_15(originalString1, matchedString1);
+
+        String originalString2 = "adobecodebanc";
+        String matchedString2 = "abc";
+        new MinimumWindowSubstring01_15(originalString2, matchedString2);
+
+        String originalString3 = "a";
+        String matchedString3 = "aa";
+        new MinimumWindowSubstring01_15(originalString3, matchedString3);
+
+        String originalString4 = "abcabcbb";
+        new LongestSubstringWithoutRepeatingCharacters_16(originalString4);
+
+        String originalString5 = "pwwkew";
+        new LongestSubstringWithoutRepeatingCharacters_16(originalString5);
+
+        String originalString6 = "aabacbebebe";
+        int uniqueCharWeWant = 3;
+        new LongestSubstringWithKUniques_18(originalString6, uniqueCharWeWant);
+
+        String originalString7 = "aabaaab";
+        int uniqueCharWeWant1 = 2;
+        new LongestSubstringWithKUniques_18(originalString7, uniqueCharWeWant1);
+
+        String originalString8 = "aaaa";
+        int uniqueCharWeWant2 = 2;
+        new LongestSubstringWithKUniques_18(originalString8, uniqueCharWeWant2);
+
+        String originalString9 = "aba";
+        int uniqueCharWeWant3 = 2;
+        new CountSubstringsWithKDistinctCharacters_19(originalString9, uniqueCharWeWant3);
+
+        String originalString10 = "aa";
+        int uniqueCharWeWant4 = 1;
+        new CountSubstringsWithKDistinctCharacters_19(originalString10, uniqueCharWeWant4);
     }
 }
