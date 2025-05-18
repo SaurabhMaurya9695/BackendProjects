@@ -21,6 +21,7 @@ public class CountSubstringsWithKDistinctCharacters_19 {
         if (k == 1) {
             // this is a special case, in this one we don't want two hasMap, only one is sufficient
             solveForOne(s);
+            return;
         }
 
         int n = s.length();

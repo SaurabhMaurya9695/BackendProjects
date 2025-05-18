@@ -93,4 +93,16 @@ public class CommonUtil {
             System.out.println("Char not found in HashMap");
         }
     }
+
+    public static void removeIntHashMap(HashMap<Integer, Integer> mp, int x) {
+        if (mp.containsKey(x)) {
+            if (mp.get(x) == 1) {
+                mp.remove(x);
+            } else {
+                mp.put(x, mp.get(x) - 1);
+            }
+        } else {
+            System.out.println("Char not found in HashMap");
+        }
+    }
 }

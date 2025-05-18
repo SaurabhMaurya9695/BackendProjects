@@ -10,6 +10,8 @@ import com.backend.dsa.atoz.arrays.SecondLargetsElement;
 import com.backend.dsa.atoz.arrays.UnionOfTwoSortedArrays;
 import com.backend.dsa.atoz.hashmapAndHeaps.CheckEveryPairIsDivisibleByK_10;
 import com.backend.dsa.atoz.hashmapAndHeaps.CountAllSubarrayWithKSum_13;
+import com.backend.dsa.atoz.hashmapAndHeaps.CountNumberOfNiceSubarrays_21;
+import com.backend.dsa.atoz.hashmapAndHeaps.CountOfEquivalentSubarrays_20;
 import com.backend.dsa.atoz.hashmapAndHeaps.CountSubstringsWithKDistinctCharacters_19;
 import com.backend.dsa.atoz.hashmapAndHeaps.DistinctElementInWindowK_11;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindCEO_08;
@@ -21,6 +23,8 @@ import com.backend.dsa.atoz.hashmapAndHeaps.LengthOfLargestSubarrayWithContiguou
 import com.backend.dsa.atoz.hashmapAndHeaps.LongestConsecutiveSequence_02;
 import com.backend.dsa.atoz.hashmapAndHeaps.LongestSubstringWithKUniques_18;
 import com.backend.dsa.atoz.hashmapAndHeaps.LongestSubstringWithoutRepeatingCharacters_16;
+import com.backend.dsa.atoz.hashmapAndHeaps.MaxConsecutiveOnes_2_23;
+import com.backend.dsa.atoz.hashmapAndHeaps.MaximumConsecutiveOnes_1_22;
 import com.backend.dsa.atoz.hashmapAndHeaps.MergeKSortedList_06;
 import com.backend.dsa.atoz.hashmapAndHeaps.MinimumWindowSubstring01_15;
 import com.backend.dsa.atoz.hashmapAndHeaps.NearlySorted_04;
@@ -211,5 +215,39 @@ public class EntryPoint {
         String originalString10 = "aa";
         int uniqueCharWeWant4 = 1;
         new CountSubstringsWithKDistinctCharacters_19(originalString10, uniqueCharWeWant4);
+
+        int[] arr24 = { 2, 5, 3, 5, 2, 4, 1, 3, 1, 4 };
+        new CountOfEquivalentSubarrays_20(arr24);
+
+        int[] arr25 = { 1, 3, 1, 2, 2 };
+        new CountOfEquivalentSubarrays_20(arr25);
+
+        int[] arr26 = { 2, 2, 2, 1, 2, 2, 1, 2, 2, 2 };
+        int k1 = 2;
+        new CountNumberOfNiceSubarrays_21(arr26, k1);
+
+        int[] arr27 = { 1, 1, 2, 1, 1 };
+        int k2 = 3;
+        new CountNumberOfNiceSubarrays_21(arr27, k2);
+
+        int[] arr28 = { 1, 1, 0, 1, 0, 0, 1, 1, 0, 1, 0, 1, 1 };
+        int maxFlipAllowed = 2;
+        new MaximumConsecutiveOnes_1_22(arr28, maxFlipAllowed);
+
+        int[] arr29 = { 1, 0, 1 };
+        int maxFlipAllowed1 = 1;
+        new MaximumConsecutiveOnes_1_22(arr29, maxFlipAllowed1);
+
+        int[] arr30 = { 1, 0, 0, 1, 0, 1, 0, 1 };
+        int maxFlipAllowed2 = 2;
+        new MaximumConsecutiveOnes_1_22(arr30, maxFlipAllowed2);
+
+        int[] arr31 = { 1, 1 };
+        int maxFlipAllowed3 = 2;
+        new MaximumConsecutiveOnes_1_22(arr31, maxFlipAllowed3);
+
+        int[] arr32 = { 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1 };
+        int AtMostFlipAllowed4 = 3;
+        new MaxConsecutiveOnes_2_23(arr32, AtMostFlipAllowed4);
     }
 }
