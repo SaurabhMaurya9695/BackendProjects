@@ -14,9 +14,12 @@ import com.backend.dsa.atoz.hashmapAndHeaps.CountNumberOfNiceSubarrays_21;
 import com.backend.dsa.atoz.hashmapAndHeaps.CountOfEquivalentSubarrays_20;
 import com.backend.dsa.atoz.hashmapAndHeaps.CountSubstringsWithKDistinctCharacters_19;
 import com.backend.dsa.atoz.hashmapAndHeaps.DistinctElementInWindowK_11;
+import com.backend.dsa.atoz.hashmapAndHeaps.FIndAllAnagaramInString_25;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindCEO_08;
 import com.backend.dsa.atoz.hashmapAndHeaps.FindItineraryFromTickets_09;
 import com.backend.dsa.atoz.hashmapAndHeaps.FoundHighOccuringChar_01;
+import com.backend.dsa.atoz.hashmapAndHeaps.GroupAnagrams_26;
+import com.backend.dsa.atoz.hashmapAndHeaps.KAnagram_24;
 import com.backend.dsa.atoz.hashmapAndHeaps.KLargestElements_03;
 import com.backend.dsa.atoz.hashmapAndHeaps.LargestSubarrayWithSumZero_12;
 import com.backend.dsa.atoz.hashmapAndHeaps.LengthOfLargestSubarrayWithContiguousElements_14;
@@ -249,5 +252,22 @@ public class EntryPoint {
         int[] arr32 = { 0, 0, 1, 1, 0, 0, 1, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 1, 1 };
         int AtMostFlipAllowed4 = 3;
         new MaxConsecutiveOnes_2_23(arr32, AtMostFlipAllowed4);
+
+        String s1 = "geeks";
+        String s2 = "eggkf";
+        int swaps = 1;
+        new KAnagram_24(s1, s2, swaps);
+
+        String s11 = "fodr";
+        String s22 = "gork";
+        int swaps1 = 2;
+        new KAnagram_24(s11, s22, swaps1);
+
+        String sr = "cbaebabacd";
+        String pattern = "abc";
+        new FIndAllAnagaramInString_25(sr, pattern);
+
+        String[] str = { "eat", "tea", "tan", "ate", "nat", "bat" };
+        new GroupAnagrams_26(str);
     }
 }

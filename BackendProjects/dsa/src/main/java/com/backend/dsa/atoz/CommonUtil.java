@@ -3,6 +3,7 @@ package com.backend.dsa.atoz;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 import java.util.PriorityQueue;
 
 public class CommonUtil {
@@ -104,5 +105,45 @@ public class CommonUtil {
         } else {
             System.out.println("Char not found in HashMap");
         }
+    }
+
+    /**
+     * Checks if all char of p String MapPattern is present in s String MapString
+     * @param s
+     * @param p
+     * @return true or false based on condition, if all present then true or else false
+     */
+    public static boolean compare(HashMap<Character, Integer> s, HashMap<Character, Integer> p) {
+        for (char c : s.keySet()) {
+            if (!p.containsKey(c)) {
+                return false;
+            }
+            if (!Objects.equals(s.get(c), p.get(c))) {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    /**
+     * Checks how many char are different in it
+     * @param s
+     * @param p
+     * @return true or false based on condition, if all present then true or else false
+     */
+    public static int cntDifference(HashMap<Character, Integer> s, HashMap<Character, Integer> p) {
+        int cnt = 0;
+        for (char c : s.keySet()) {
+            if (p.containsKey(c)) {
+                cnt += Math.abs(s.get(c) - p.get(c));
+            }
+        }
+        return cnt;
+    }
+
+    public static StringBuilder reverse(String s) {
+        StringBuilder sb = new StringBuilder(s);
+        sb.reverse();
+        return sb;
     }
 }
