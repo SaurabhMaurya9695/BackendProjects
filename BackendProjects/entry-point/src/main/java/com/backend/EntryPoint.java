@@ -31,6 +31,7 @@ import com.backend.dsa.atoz.hashmapAndHeaps.MaximumConsecutiveOnes_1_22;
 import com.backend.dsa.atoz.hashmapAndHeaps.MergeKSortedList_06;
 import com.backend.dsa.atoz.hashmapAndHeaps.MinimumWindowSubstring01_15;
 import com.backend.dsa.atoz.hashmapAndHeaps.NearlySorted_04;
+import com.backend.dsa.atoz.hashmapAndHeaps.RabbitsInForest_26;
 import com.backend.dsa.atoz.sorting.BubbleSort;
 import com.backend.dsa.atoz.sorting.InsertionSort;
 import com.backend.dsa.atoz.sorting.MergeSort;
@@ -269,5 +270,9 @@ public class EntryPoint {
 
         String[] str = { "eat", "tea", "tan", "ate", "nat", "bat" };
         new GroupAnagrams_26(str);
+
+        int [] rabbits = {2 , 2, 3 , 1, 0 , 2 , 2, 3, 1};
+        new RabbitsInForest_26(rabbits);
+
     }
 }
