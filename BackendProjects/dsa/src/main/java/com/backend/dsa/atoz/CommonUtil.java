@@ -146,4 +146,8 @@ public class CommonUtil {
         sb.reverse();
         return sb;
     }
+
+    public static Character AlphabetValueOfChar(char ch){
+        return (char) ('a' + (ch - '0') - 1);
+    }
 }
