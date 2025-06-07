@@ -13,15 +13,15 @@ import java.util.Arrays;
 public class Fibonacci {
 
     public Fibonacci(int n) {
-        System.out.println(recursion(n));
+        System.out.println("Using recursion : " + recursion(n));
 
         int[] dp = new int[n + 1];
         Arrays.fill(dp, -1);
-        System.out.println(memorization(n, dp));
+        System.out.println("Using Memo : " + memorization(n, dp));
 
-        System.out.println(tabulation(n));
+        System.out.println("Using tabulation : " + tabulation(n));
 
-        System.out.println(spaceOptimized(n));
+        System.out.println("Using space optimization : " + spaceOptimized(n));
     }
 
     private int spaceOptimized(int n) {
