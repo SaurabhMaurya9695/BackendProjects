@@ -1,4 +1,4 @@
-package com.backend.design.pattern.designs.documentEditor.badDesign;
+package com.backend.design.pattern.designs.DocumentEditor.badDesign;
 
 import java.util.ArrayList;
 import java.util.List;

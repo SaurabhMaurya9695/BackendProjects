@@ -1,4 +1,4 @@
-package com.backend.design.pattern.designs.documentEditor.goodDesign.saveLLD;
+package com.backend.design.pattern.designs.DocumentEditor.goodDesign.saveLLD;
 
 public class SaveToDb extends Persistence {
 

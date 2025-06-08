@@ -1,6 +1,6 @@
-package com.backend.design.pattern.designs.documentEditor.goodDesign;
+package com.backend.design.pattern.designs.DocumentEditor.goodDesign;
 
-import com.backend.design.pattern.designs.documentEditor.goodDesign.renderLLD.DocumentElement;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.renderLLD.DocumentElement;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.backend.design.pattern.designs.documentEditor.goodDesign.renderLLD;
+package com.backend.design.pattern.designs.DocumentEditor.goodDesign.renderLLD;
 
 public class TextElement extends DocumentElement {
 

@@ -1,8 +1,8 @@
-package com.backend.design.pattern.designs.documentEditor.goodDesign;
+package com.backend.design.pattern.designs.DocumentEditor.goodDesign;
 
-import com.backend.design.pattern.designs.documentEditor.goodDesign.renderLLD.TextElement;
-import com.backend.design.pattern.designs.documentEditor.goodDesign.renderLLD.VideoElement;
-import com.backend.design.pattern.designs.documentEditor.goodDesign.saveLLD.Persistence;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.renderLLD.TextElement;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.renderLLD.VideoElement;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.saveLLD.Persistence;
 
 public class DocumentEditor {
 

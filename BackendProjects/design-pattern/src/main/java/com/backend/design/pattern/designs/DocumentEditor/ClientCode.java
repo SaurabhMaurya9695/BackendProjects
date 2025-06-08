@@ -1,9 +1,9 @@
-package com.backend.design.pattern.designs.documentEditor;
+package com.backend.design.pattern.designs.DocumentEditor;
 
-import com.backend.design.pattern.designs.documentEditor.goodDesign.Document;
-import com.backend.design.pattern.designs.documentEditor.goodDesign.DocumentEditor;
-import com.backend.design.pattern.designs.documentEditor.goodDesign.saveLLD.Persistence;
-import com.backend.design.pattern.designs.documentEditor.goodDesign.saveLLD.SaveToDb;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.Document;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.DocumentEditor;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.saveLLD.Persistence;
+import com.backend.design.pattern.designs.DocumentEditor.goodDesign.saveLLD.SaveToDb;
 
 public class ClientCode {
 

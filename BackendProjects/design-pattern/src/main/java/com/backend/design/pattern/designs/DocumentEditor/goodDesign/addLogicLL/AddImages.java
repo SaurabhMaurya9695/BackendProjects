@@ -1,4 +1,4 @@
-package com.backend.design.pattern.designs.documentEditor.goodDesign.addLogicLL;
+package com.backend.design.pattern.designs.DocumentEditor.goodDesign.addLogicLL;
 
 public class AddImages extends Add {
 
