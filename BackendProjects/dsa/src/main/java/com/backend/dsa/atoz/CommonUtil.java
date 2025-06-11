@@ -1,5 +1,7 @@
 package com.backend.dsa.atoz;
 
+import com.backend.dsa.atoz.trees.Node;
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -109,6 +111,7 @@ public class CommonUtil {
 
     /**
      * Checks if all char of p String MapPattern is present in s String MapString
+     *
      * @param s
      * @param p
      * @return true or false based on condition, if all present then true or else false
@@ -127,6 +130,7 @@ public class CommonUtil {
 
     /**
      * Checks how many char are different in it
+     *
      * @param s
      * @param p
      * @return true or false based on condition, if all present then true or else false
@@ -147,7 +151,28 @@ public class CommonUtil {
         return sb;
     }
 
-    public static Character AlphabetValueOfChar(char ch){
+    public static Character AlphabetValueOfChar(char ch) {
         return (char) ('a' + (ch - '0') - 1);
+    }
+
+    public static void displayNAryTree(Node node) {
+        //  we need to print like this
+        // 10 -> 20, 30, 40 , .
+        // 20 -> 50 , 60 .
+        // ..
+        // ..
+        // so on
+
+        // Faith -> 20, 30, 40 knows how to print 10 will just add yourself in first
+
+        // Meeting expectations
+        System.out.print(node._value + "-> ");  // printing 10
+        for (Node child : node._children) {
+            System.out.print(child._value + " ");
+        }
+        System.out.println(".");
+        for (Node child : node._children) {
+            displayNAryTree(child);
+        }
     }
 }
