@@ -1,4 +1,4 @@
-package com.backend.dsa.atoz.trees;
+package com.backend.dsa.atoz.trees.nAryTree;
 
 public class SizeOfNAryTree {
 

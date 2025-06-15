@@ -23,12 +23,12 @@ public class MergeKSortedList_06 {
         List<Integer> list = new ArrayList<>();
         while (!pq.isEmpty()) {
             Pair pair = pq.remove(); // this will give us smaller value
-            list.add(pair.value);
+            list.add(pair.state);
             pair.dataIdx++;
             // if the size of the list exist then increase the idx of data and insert the value
             int indexOfTheList = pair.dataIdx;
             if (indexOfTheList < arr[pair.listIdx].length) {
-                pair.value = arr[pair.listIdx][pair.dataIdx];
+                pair.state = arr[pair.listIdx][pair.dataIdx];
                 pq.add(pair);
             }
         }

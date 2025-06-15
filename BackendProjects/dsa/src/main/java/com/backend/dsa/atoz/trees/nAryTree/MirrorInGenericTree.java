@@ -1,6 +1,4 @@
-package com.backend.dsa.atoz.trees;
-
-import com.backend.dsa.atoz.CommonUtil;
+package com.backend.dsa.atoz.trees.nAryTree;
 
 import java.util.Collections;
 

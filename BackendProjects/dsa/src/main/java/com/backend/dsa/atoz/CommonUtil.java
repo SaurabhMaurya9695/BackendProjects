@@ -1,6 +1,6 @@
 package com.backend.dsa.atoz;
 
-import com.backend.dsa.atoz.trees.Node;
+import com.backend.dsa.atoz.trees.nAryTree.Node;
 
 import java.util.HashMap;
 import java.util.List;
@@ -174,5 +174,37 @@ public class CommonUtil {
         for (Node child : node._children) {
             displayNAryTree(child);
         }
+    }
+
+    public static Node cloneTree(Node root) {
+        if (root == null) {
+            return null;
+        }
+
+        Node newRoot = new Node(root._value);
+        newRoot.setLeft(root.getLeft());
+        newRoot.setRight(root.getRight());
+        if (root.getChildren() != null) {
+            for (Node child : root.getChildren()) {
+                newRoot.addChild(cloneTree(child));
+            }
+        }
+        return newRoot;
+    }
+
+    public static void displayBT(Node node) {
+        // you need to print in this way "leftChild" <- parent -> "rightChild"
+        // faith on displayBT(leftChild) ,  displayBT(rightChild)
+        // for meeting expectations -> displayBT(leftChild) , node.value ,  displayBT(rightChild)
+        if (node == null) {
+            return;
+        }
+        String str = "";
+        str += node.getLeft() == null ? "." : node.getLeft().getValue() + " ";
+        str += " <- " + node.getValue() + " -> ";
+        str += node.getRight() == null ? "." : node.getRight().getValue() + " ";
+        System.out.println(str);
+        displayBT(node.getLeft());
+        displayBT(node.getRight());
     }
 }
