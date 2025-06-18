@@ -2,7 +2,10 @@ package com.backend;
 
 import com.backend.dsa.atoz.CommonUtil;
 import com.backend.dsa.atoz.trees.binaryTrees.BalancedBinaryTree;
+import com.backend.dsa.atoz.trees.binaryTrees.BinaryTreeRightSideView;
+import com.backend.dsa.atoz.trees.binaryTrees.BottomViewOfBinaryTree;
 import com.backend.dsa.atoz.trees.binaryTrees.CreateBinaryTree;
+import com.backend.dsa.atoz.trees.binaryTrees.DiagonalOrderOfBT;
 import com.backend.dsa.atoz.trees.binaryTrees.DiameterOfBT;
 import com.backend.dsa.atoz.trees.binaryTrees.IterativePrePostInTraversal;
 import com.backend.dsa.atoz.trees.binaryTrees.LevelOrderTraversalBFS;
@@ -13,9 +16,13 @@ import com.backend.dsa.atoz.trees.binaryTrees.PrintNodesKDistanceAway;
 import com.backend.dsa.atoz.trees.binaryTrees.PrintSingleChildNodes;
 import com.backend.dsa.atoz.trees.binaryTrees.RemoveLeafs;
 import com.backend.dsa.atoz.trees.binaryTrees.RootToLeftPaths;
+import com.backend.dsa.atoz.trees.binaryTrees.SerailizeAndDeserializeOfBinaryTree;
 import com.backend.dsa.atoz.trees.binaryTrees.TiltOfBinaryTree;
+import com.backend.dsa.atoz.trees.binaryTrees.TopViewOfBinaryTree;
 import com.backend.dsa.atoz.trees.binaryTrees.TransformBackFromALeftClonedTree;
 import com.backend.dsa.atoz.trees.binaryTrees.TransformedToLeftCloneTree;
+import com.backend.dsa.atoz.trees.binaryTrees.VerticalOrderSumUsingBFS;
+import com.backend.dsa.atoz.trees.binaryTrees.VerticalViewOfABT;
 import com.backend.dsa.atoz.trees.nAryTree.*;
 
 public class EntryPoint {
@@ -104,5 +111,13 @@ public class EntryPoint {
                 "DIAMETER OF A BINARY TREE EFFICIENTS WAY :" + new DiameterOfBT(btRoot).getEfficientDiamater());
         System.out.println("TILT OF A BINARY TREE : " + new TiltOfBinaryTree(btRoot).tilt);
         System.out.println("IS A BALANCE TREE : " + new BalancedBinaryTree(btRoot).balanced);
+        System.out.println("RIGHT VIEW OF A BINARY TREE IS : " + new BinaryTreeRightSideView(btRoot)._list);
+        System.out.println("BOTTOM VIEW OF A BINARY TREE IS : " + new BottomViewOfBinaryTree(btRoot)._list);
+        System.out.println("TOP VIEW OF A BINARY TREE IS : " + new TopViewOfBinaryTree(btRoot).lst);
+        System.out.println("DIAGONAL ORDER OF A BINARY TREE IS : " + new DiagonalOrderOfBT(btRoot).temp);
+        System.out.println("VERTICAL ORDER OF A BINARY TREE IS LEETCODE SOLUTION : " + new VerticalViewOfABT(
+                btRoot)._listByLeetCode);
+        System.out.println("VERTICAL ORDER OF A BINARY TREE IS GFG SOLUTION : " + new VerticalViewOfABT(btRoot)._list);
+        System.out.println(new VerticalOrderSumUsingBFS(btRoot));
     }
 }

@@ -10,6 +10,10 @@ public class Node {
     public int _value;
     public List<Node> _children;
 
+    public Node() {
+
+    }
+
     public Node(int value) {
         this._value = value;
         this._children = new ArrayList<>();

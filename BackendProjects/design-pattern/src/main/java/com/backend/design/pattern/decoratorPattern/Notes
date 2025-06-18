@@ -4,7 +4,7 @@
  *
  * Inheritance also helps to expand the functionality but that is at compile time not at runtime.
  * One of the best example of decorator is customized pizza. Where you have pizza and you have different decorator
- * like addExtraCheese, cheese burst, olives yes, jalepeno yes. We keep adding top ups and we finally get pizza.
+ * like addExtraCheese, cheese burst, olives yes, jalapeno yes. We keep adding top ups and we finally get pizza.
  *
  * You can also think of Account -> Saving Account -> Salary Account -> Preferred Account.
  * Where base is Account now based on different account type it keeps adding new features and offers to same account.
