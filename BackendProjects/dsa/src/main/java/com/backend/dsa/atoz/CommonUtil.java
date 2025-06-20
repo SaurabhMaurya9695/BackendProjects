@@ -2,6 +2,7 @@ package com.backend.dsa.atoz;
 
 import com.backend.dsa.atoz.trees.nAryTree.Node;
 
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -206,5 +207,9 @@ public class CommonUtil {
         System.out.println(str);
         displayBT(node.getLeft());
         displayBT(node.getRight());
+    }
+
+    public static void sortArray(int[] A) {
+        Arrays.sort(A);
     }
 }
