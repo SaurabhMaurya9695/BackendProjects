@@ -8,7 +8,7 @@ import java.util.List;
 public class NotificationService {
 
     public static void notify(Order order) {
-        System.out.println("\nNotification: New " + order.getType() + " order placed!");
+        System.out.println("\nPublisher: New " + order.getType() + " order placed!");
         System.out.println("---------------------------------------------");
         System.out.println("Order ID: " + order.getOrderId());
         System.out.println("Customer: " + order.getUser().getUserName());
