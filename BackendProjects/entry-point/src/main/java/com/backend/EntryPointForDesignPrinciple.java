@@ -4,6 +4,11 @@ import com.backend.design.pattern.behavioural.chainOfResponsibility.Approver;
 import com.backend.design.pattern.behavioural.chainOfResponsibility.Director;
 import com.backend.design.pattern.behavioural.chainOfResponsibility.Manager;
 import com.backend.design.pattern.behavioural.chainOfResponsibility.SeniorManager;
+import com.backend.design.pattern.behavioural.strategy.solution.SortingContext;
+import com.backend.design.pattern.behavioural.strategy.solution.SortingStrategy;
+import com.backend.design.pattern.behavioural.strategy.solution.concreteStrategies.BubbleSortStrategy;
+import com.backend.design.pattern.behavioural.strategy.solution.concreteStrategies.MergeSortStrategy;
+import com.backend.design.pattern.behavioural.strategy.solution.concreteStrategies.QuickSortStrategy;
 
 import java.io.IOException;
 
@@ -94,17 +99,29 @@ public class EntryPointForDesignPrinciple {
             System.out.println(pizza.bake());
          */
 
+        /* TODO - CHAIN OF RESPONSIBILITY PATTERN
+            Approver approver = new Manager();
+            Approver approver1 = new SeniorManager();
+            Approver approver2 = new Director();
+            // setting the chain
+            approver.setApprover(approver1);
+            approver1.setApprover(approver2);
+            approver.approveRequest(14);
 
-        Approver approver = new Manager();
-        Approver approver1 = new SeniorManager();
-        Approver approver2 = new Director();
+         */
 
-        // setting the chain
-        approver.setApprover(approver1);
-        approver1.setApprover(approver2);
+        int[] arr = { 4, 5, 1 };
 
-        approver.approveRequest(4);
+        // Initializing ths Strategies
+        SortingStrategy bubbleStrategy = new BubbleSortStrategy();
+        SortingStrategy quickStrategy = new QuickSortStrategy();
+        SortingStrategy mergeStrategy = new MergeSortStrategy();
 
-        approver.approveRequest(14);
+        // injecting the Strategies
+        SortingContext context = new SortingContext(bubbleStrategy);
+        context.performSort(arr);
+
+        context.setSortingStrategy(quickStrategy);
+        context.performSort(arr);
     }
 }
