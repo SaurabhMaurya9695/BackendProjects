@@ -1,5 +1,10 @@
 package com.backend;
 
+import com.backend.design.pattern.behavioural.chainOfResponsibility.Approver;
+import com.backend.design.pattern.behavioural.chainOfResponsibility.Director;
+import com.backend.design.pattern.behavioural.chainOfResponsibility.Manager;
+import com.backend.design.pattern.behavioural.chainOfResponsibility.SeniorManager;
+
 import java.io.IOException;
 
 public class EntryPointForDesignPrinciple {
@@ -16,8 +21,8 @@ public class EntryPointForDesignPrinciple {
         */
 
         /** TODO - it will create a connection to db and created a table name studio and artist
-             MakeSqlConnection sqlConnection = new MakeSqlConnection();
-             sqlConnection.MakeConnection();
+         MakeSqlConnection sqlConnection = new MakeSqlConnection();
+         sqlConnection.MakeConnection();
          */
 
         /*
@@ -90,6 +95,16 @@ public class EntryPointForDesignPrinciple {
          */
 
 
+        Approver approver = new Manager();
+        Approver approver1 = new SeniorManager();
+        Approver approver2 = new Director();
 
+        // setting the chain
+        approver.setApprover(approver1);
+        approver1.setApprover(approver2);
+
+        approver.approveRequest(4);
+
+        approver.approveRequest(14);
     }
 }
