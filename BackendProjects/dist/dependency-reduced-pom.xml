@@ -55,7 +55,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>com.backend.EntryPointRecursion</mainClass>
+                  <mainClass>com.backend.EntryPointForDesignPrinciple</mainClass>
                 </transformer>
               </transformers>
             </configuration>
