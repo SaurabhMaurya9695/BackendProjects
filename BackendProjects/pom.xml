@@ -18,6 +18,7 @@
         <module>design-principles</module>
         <module>entry-point</module>
         <module>dsa</module>
+        <module>xjc-plugin</module>
     </modules>
 
     <!-- Dependencies -->

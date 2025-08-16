@@ -8,10 +8,15 @@
         <outputRelativeToContentRoot value="true" />
         <module name="design-pattern" />
         <module name="design-principles" />
+        <module name="xjc-richmodel-plugin" />
         <module name="dsa" />
         <module name="Backend-Project-dist" />
         <module name="entry-point" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="xjc-plugin" target="17" />
+      <module name="xjc-rich-model-plugin" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

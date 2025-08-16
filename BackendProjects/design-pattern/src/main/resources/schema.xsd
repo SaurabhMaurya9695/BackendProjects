@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.example.com/design"
+           xmlns="http://www.example.com/design"
+           elementFormDefault="qualified"
+           attributeFormDefault="unqualified">
+
+    <!-- Base entity with id and timestamps -->
+    <xs:complexType name="BaseEntity" abstract="true">
+        <xs:sequence>
+            <xs:element name="id" type="xs:string"/>
+            <xs:element name="createdAt" type="xs:dateTime"/>
+            <xs:element name="updatedAt" type="xs:dateTime"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- User type extending BaseEntity -->
+    <xs:complexType name="User">
+        <xs:complexContent>
+            <xs:extension base="BaseEntity">
+                <xs:sequence>
+                    <xs:element name="firstName" type="xs:string"/>
+                    <xs:element name="lastName" type="xs:string"/>
+                    <xs:element name="email" type="xs:string"/>
+                    <xs:element name="roles" type="RoleList"/>
+                </xs:sequence>
+                <xs:attribute name="status" type="UserStatus" use="required"/>
+            </xs:extension>
+        </xs:complexContent>
+    </xs:complexType>
+
+    <!-- Enum for User status -->
+    <xs:simpleType name="UserStatus">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="ACTIVE"/>
+            <xs:enumeration value="INACTIVE"/>
+            <xs:enumeration value="SUSPENDED"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <!-- Role entity -->
+    <xs:complexType name="Role">
+        <xs:sequence>
+            <xs:element name="name" type="xs:string"/>
+            <xs:element name="permissions" type="PermissionList"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Permission entity -->
+    <xs:complexType name="Permission">
+        <xs:sequence>
+            <xs:element name="resource" type="xs:string"/>
+            <xs:element name="action" type="xs:string"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Collection of Roles -->
+    <xs:complexType name="RoleList">
+        <xs:sequence>
+            <xs:element name="role" type="Role" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Collection of Permissions -->
+    <xs:complexType name="PermissionList">
+        <xs:sequence>
+            <xs:element name="permission" type="Permission" maxOccurs="unbounded" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <!-- Root element -->
+    <xs:element name="SystemUsers">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="user" type="User" maxOccurs="unbounded"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+</xs:schema>

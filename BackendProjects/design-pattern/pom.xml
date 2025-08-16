@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd"
-         xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
@@ -12,15 +13,79 @@
 
     <groupId>com.backend.design.pattern</groupId>
     <artifactId>design-pattern</artifactId>
-    <name>Design-Pattern</name>
-    <packaging>jar</packaging> <!-- Included as a JAR -->
     <version>1.0.0-SNAPSHOT</version>
+    <name>Design-Pattern</name>
+    <packaging>jar</packaging>
 
     <dependencies>
+        <!-- MySQL Driver -->
         <dependency>
             <groupId>mysql</groupId>
             <artifactId>mysql-connector-java</artifactId>
             <version>8.0.33</version>
         </dependency>
+
+        <!-- Custom XJC Plugin (installed to .m2 manually or via mvn install) -->
+        <dependency>
+            <groupId>com.backend.xjc</groupId>
+            <artifactId>xjc-richmodel-plugin</artifactId>
+            <version>0.1.0</version>
+        </dependency>
+
+        <!-- JAXB runtime (Jakarta for Java 11+) -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.glassfish.jaxb</groupId>
+            <artifactId>jaxb-runtime</artifactId>
+            <version>4.0.5</version>
+        </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <!-- JAXB2 Maven Plugin -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>jaxb2-maven-plugin</artifactId>
+                <version>3.3.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-jaxb</id>
+                        <goals>
+                            <goal>xjc</goal>
+                        </goals>
+                        <configuration>
+                            <!-- Schema(s) to compile -->
+                            <sources>
+                                <source>${project.basedir}/src/main/resources/schema.xsd</source>
+                            </sources>
+
+                            <!-- Generated sources output -->
+                            <outputDirectory>${project.build.directory}/generated-sources/xjc</outputDirectory>
+
+                            <!-- Java package for generated classes -->
+                            <packageName>com.example.generated</packageName>
+
+                            <!-- Add custom plugin via args -->
+                            <args>
+                                <arg>-Xrichmodel</arg>
+                            </args>
+                        </configuration>
+                    </execution>
+                </executions>
+                <dependencies>
+                    <!-- Attach custom XJC plugin directly to this plugin -->
+                    <dependency>
+                        <groupId>com.backend.xjc</groupId>
+                        <artifactId>xjc-richmodel-plugin</artifactId>
+                        <version>0.1.0</version>
+                    </dependency>
+                </dependencies>
+            </plugin>
+        </plugins>
+    </build>
 </project>

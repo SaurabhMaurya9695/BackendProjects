@@ -13,5 +13,8 @@
         <module name="entry-point" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="xjc-plugin" target="17" />
+    </bytecodeTargetLevel>
   </component>
 </project>
