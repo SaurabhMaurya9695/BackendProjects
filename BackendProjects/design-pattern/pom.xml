@@ -54,7 +54,7 @@
                         <configuration>
                             <!-- Schema to compile -->
                             <sources>
-                                <source>${project.basedir}/src/main/resources/schema.xsd</source>
+                                <source>${project.basedir}/src/main/resources</source>
                             </sources>
 
                             <!-- Output directory for generated sources -->
