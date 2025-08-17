@@ -1,0 +1,43 @@
+# Maven target folders
+target/
+**/target/
+
+# Maven build output (jar, war, etc.)
+*.jar
+*.war
+*.ear
+*.nar
+*.zip
+*.tar.gz
+
+# Maven local repository (optional, usually not tracked)
+.m2/repository/
+
+# Eclipse / IntelliJ / VSCode settings
+*.iml
+*.ipr
+*.iws
+.idea/
+*.class
+*.log
+*.tmp
+
+# OS generated files
+.DS_Store
+Thumbs.db
+
+# Generated sources (if any outside target)
+generated-sources/
+**/generated-sources/
+
+# Logs
+*.log
+
+# Temporary files
+*.bak
+*.swp
+*.swo
+
+# MacOS system files
+.AppleDouble
+.LSOverride
