@@ -55,7 +55,7 @@
             <configuration>
               <transformers>
                 <transformer>
-                  <mainClass>com.backend.EntryPointForDesignPrinciple</mainClass>
+                  <mainClass>com.backend.EntryPoint</mainClass>
                 </transformer>
               </transformers>
             </configuration>

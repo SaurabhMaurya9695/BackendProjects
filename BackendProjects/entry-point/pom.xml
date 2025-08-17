@@ -15,7 +15,6 @@
     <artifactId>entry-point</artifactId>
     <name>Entry-Point</name>
     <packaging>jar</packaging>
-    <version>1.0.0-SNAPSHOT</version>
 
     <dependencies>
         <!-- FIXME - Added Design Principles Dependency -->

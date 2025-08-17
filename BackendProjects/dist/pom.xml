@@ -15,11 +15,6 @@
     <name>Backend-Project-dist</name>
 
     <dependencies>
-        <dependency>
-            <groupId>${project.parent.groupId}</groupId>
-            <artifactId>BackendProjects</artifactId>
-            <version>${project.parent.version}</version>
-        </dependency>
 
         <!-- Design Pattern dependencies -->
         <dependency>
@@ -46,6 +41,13 @@
         <dependency>
             <groupId>com.backend</groupId>
             <artifactId>entry-point</artifactId>
+            <version>${project.parent.version}</version>
+        </dependency>
+
+        <!-- Entry Point dependencies -->
+        <dependency>
+            <groupId>com.backend.xjc</groupId>
+            <artifactId>xjc-richmodel-plugin</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
@@ -105,8 +107,9 @@
                         </goals>
                         <configuration>
                             <transformers>
-                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                                    <mainClass>com.backend.EntryPointForDesignPrinciple</mainClass>
+                                <transformer
+                                        implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.backend.EntryPoint</mainClass>
                                 </transformer>
                             </transformers>
                         </configuration>
