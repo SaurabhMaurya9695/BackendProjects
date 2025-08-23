@@ -1,6 +1,10 @@
 # Maven target folders
 target/
 **/target/
+/target/
+*.class
+*.lst
+*.jar
 
 # Maven build output (jar, war, etc.)
 *.jar
@@ -41,3 +45,4 @@ generated-sources/
 # MacOS system files
 .AppleDouble
 .LSOverride
+
