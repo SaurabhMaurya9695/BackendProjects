@@ -1,12 +1,8 @@
 # Maven target folders
-target/
-**/target/
 /target/
-*.class
-*.lst
-*.jar
+**/target/
 
-# Maven build output (jar, war, etc.)
+# Maven build output
 *.jar
 *.war
 *.ear
@@ -14,35 +10,34 @@ target/
 *.zip
 *.tar.gz
 
-# Maven local repository (optional, usually not tracked)
+# Local Maven repo (if accidentally added)
 .m2/repository/
 
-# Eclipse / IntelliJ / VSCode settings
+# IDE settings
+.idea/
 *.iml
 *.ipr
 *.iws
-.idea/
-*.class
-*.log
-*.tmp
 
-# OS generated files
+# Compiled class files
+*.class
+
+# OS/system files
 .DS_Store
 Thumbs.db
+.AppleDouble
+.LSOverride
 
-# Generated sources (if any outside target)
+# Generated sources
 generated-sources/
 **/generated-sources/
 
-# Logs
+# Logs and temp files
 *.log
-
-# Temporary files
+*.tmp
 *.bak
 *.swp
 *.swo
 
-# MacOS system files
-.AppleDouble
-.LSOverride
-
+# IntelliJ / VS Code project files
+*.lst
