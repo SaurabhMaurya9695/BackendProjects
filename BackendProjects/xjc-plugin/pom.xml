@@ -1,57 +1,94 @@
+<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <parent>
-    <groupId>com.backend</groupId>
-    <artifactId>BackendProjects</artifactId>
-    <version>1.0.0-SNAPSHOT</version>
-  </parent>
+    <parent>
+        <groupId>com.backend</groupId>
+        <artifactId>BackendProjects</artifactId>
+        <version>1.0.0-SNAPSHOT</version>
+    </parent>
 
-  <groupId>com.backend.xjc</groupId>
-  <artifactId>xjc-richmodel-plugin</artifactId>
-  <packaging>jar</packaging>
+    <groupId>com.backend.xjc</groupId>
+    <artifactId>xjc-richmodel-plugin</artifactId>
+    <packaging>jar</packaging>
 
-  <name>XJC Rich Model Plugin</name>
-  <description>Custom XJC plugin to generate setters/getters/builders/deep copy/etc.</description>
+    <name>XJC Rich Model Plugin</name>
+    <description>Custom XJC plugin to add Lombok annotations and Serializable to generated classes</description>
 
-  <dependencies>
-    <!-- JAXB API -->
-    <dependency>
-      <groupId>jakarta.xml.bind</groupId>
-      <artifactId>jakarta.xml.bind-api</artifactId>
-      <version>4.0.2</version>
-    </dependency>
+    <properties>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
+    </properties>
 
-    <!-- XJC SPI -->
-    <dependency>
-      <groupId>com.sun.xml.bind</groupId>
-      <artifactId>jaxb-xjc</artifactId>
-      <version>4.0.5</version>
-      <scope>provided</scope>
-    </dependency>
+    <dependencies>
+        <!-- XJC SPI (provided because xjc tool/runtime supplies it) -->
+        <dependency>
+            <groupId>com.sun.xml.bind</groupId>
+            <artifactId>jaxb-xjc</artifactId>
+            <version>3.0.2</version>
+            <scope>provided</scope>
+        </dependency>
 
-    <!-- CodeModel for source generation -->
-    <dependency>
-      <groupId>com.sun.codemodel</groupId>
-      <artifactId>codemodel</artifactId>
-      <version>2.6</version>
-    </dependency>
-  </dependencies>
+        <!-- CodeModel used by the plugin (matches your use of com.sun.codemodel) -->
+        <dependency>
+            <groupId>com.sun.codemodel</groupId>
+            <artifactId>codemodel</artifactId>
+            <version>2.6</version>
+        </dependency>
 
-  <build>
-    <plugins>
-      <!-- Ensure Java 11+ -->
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.11.0</version>
-        <configuration>
-          <source>11</source>
-          <target>11</target>
-        </configuration>
-      </plugin>
-    </plugins>
-  </build>
+        <!-- Lombok annotations (compile scope so plugin can reference them at compile-time) -->
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>compile</scope>
+        </dependency>
+
+        <!-- Optional: Jakarta JAXB API if you need references at compile-time -->
+        <dependency>
+            <groupId>jakarta.xml.bind</groupId>
+            <artifactId>jakarta.xml.bind-api</artifactId>
+            <version>4.0.2</version>
+            <scope>provided</scope>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <resources>
+            <!-- ensure META-INF/services packaged -->
+            <resource>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>META-INF/**</include>
+                </includes>
+            </resource>
+        </resources>
+
+        <plugins>
+            <!-- Java compile -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.11.0</version>
+                <configuration>
+                    <release>17</release>
+                </configuration>
+            </plugin>
+
+            <!-- Ensure JAR includes resources (should be default) -->
+            <plugin>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.2</version>
+                <configuration>
+                    <archive>
+                        <manifest>
+                            <addDefaultImplementationEntries>true</addDefaultImplementationEntries>
+                        </manifest>
+                    </archive>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>

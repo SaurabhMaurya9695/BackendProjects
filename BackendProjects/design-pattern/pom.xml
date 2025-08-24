@@ -36,6 +36,14 @@
             <artifactId>jaxb-runtime</artifactId>
             <version>4.0.5</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>1.18.34</version>
+            <scope>provided</scope> <!-- Provided is common for lombok -->
+        </dependency>
+
     </dependencies>
 
     <build>
@@ -64,9 +72,10 @@
                             <packageName>com.backend.xjc</packageName>
 
                             <!-- Add custom plugin via args -->
-                            <args>
-                                <arg>-Xrichmodel</arg>
-                            </args>
+                            <arguments>
+                                <argument>-XrichModel</argument>
+<!--                                <argument>-noSerialVersionUID</argument>-->
+                            </arguments>
                         </configuration>
                     </execution>
                 </executions>
@@ -75,7 +84,7 @@
                     <dependency>
                         <groupId>com.backend.xjc</groupId>
                         <artifactId>xjc-richmodel-plugin</artifactId>
-                        <version>0.1.0</version>
+                        <version>1.0.0-SNAPSHOT</version>
                     </dependency>
                 </dependencies>
             </plugin>
