@@ -1,4 +1,4 @@
-1 :  there is an mainApplication
+1 : there is an mainApplication
 2 : app1 is sending the data in xml format and mainApplication is receiving the data in the xml format
 3 : app2 is sending / receiving data in json format
 4 : we have to send the app1 data to app2 in short we have to create an adaptor which can accept the
