@@ -1,0 +1,18 @@
+Facade Design Pattern (Simplified Explanation)
+
+The Facade Design Pattern is a structural design pattern that provides a simple, unified interface to a complex
+system of classes, libraries, or frameworks.
+
+Instead of exposing the client to the complexity of multiple subsystems, the Facade defines one entry
+point method (e.g., facade.execute()) that internally calls all the required methods in the correct sequence.
+
+A good real-life example is powering on a computer:
+When you press the power button, you only perform one action. Internally, however, multiple processes happen:
+1 : CPU initialization
+2 : RAM allocation
+3 : BIOS initialization
+4 : Operating System setup
+5 : The Facade (power button) hides all these details and provides a simple interface to the user.
+
+⚡ In short: The Facade pattern makes a complex system easier to use by exposing only what’s necessary while
+handling all the complexity behind the scenes.
