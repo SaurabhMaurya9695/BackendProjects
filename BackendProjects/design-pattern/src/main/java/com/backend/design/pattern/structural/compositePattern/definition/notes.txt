@@ -1,0 +1,10 @@
+1 : The Composite Design Pattern is a structural design pattern that lets you treat individual objects (leaves)
+    and groups of objects (composites) in a uniform way.
+2 : It’s typically used to represent hierarchical structures like file systems, organization charts, menus, etc.
+3 :          Component (IFileSystemItem)
+               /    |    \
+              /     |     \
+         Leaf(File) |  Composite(Folder)
+                    |
+            (manages children Components)
+4 :
