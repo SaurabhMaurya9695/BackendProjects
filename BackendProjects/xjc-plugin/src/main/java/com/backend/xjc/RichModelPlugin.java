@@ -53,7 +53,7 @@ public class RichModelPlugin extends Plugin {
 
         impl.annotate(cm.ref("lombok.Data"));
         impl.annotate(cm.ref("lombok.Builder")).param("toBuilder", true);
-        impl.annotate(cm.ref("lombok.NoArgsConstructor"));
+//        impl.annotate(cm.ref("lombok.NoArgsConstructor")); -> NOT NEEDED
         impl.annotate(cm.ref("lombok.AllArgsConstructor"));
         impl.annotate(cm.ref("lombok.EqualsAndHashCode")).param("callSuper", false);
         impl.annotate(cm.ref("lombok.ToString"));

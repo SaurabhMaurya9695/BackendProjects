@@ -2,3 +2,7 @@
 2: We can Easily add new Gateway in future
 3: There should be a standard payment flow with required validation
 4: Have error Handling & Retries Mechanism
+
+HW
+5: There can be a diff ways of handling retry mechanism (Handle in code) such as Linear or Exponential Back off
+6: Try adding recurring payment flow/subscription
