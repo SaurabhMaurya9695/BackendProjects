@@ -1,0 +1,4 @@
+1: Should Support Multiple providers (paytm, razorpay, etc.)
+2: We can Easily add new Gateway in future
+3: There should be a standard payment flow with required validation
+4: Have error Handling & Retries Mechanism
