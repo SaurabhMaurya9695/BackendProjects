@@ -4,6 +4,8 @@ import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.ConcreteGa
 import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.ConcreteGateways.RazorpayGateway;
 import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.GatewayProxy;
 import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.PaymentGateway;
+import com.backend.design.pattern.designs.PaymentGatwaySystem.Strategies.ExponentialBackoffStrategy;
+import com.backend.design.pattern.designs.PaymentGatwaySystem.Strategies.LinearBackoffStrategy;
 import com.backend.xjc.GatewayType;
 
 /**
@@ -58,17 +60,19 @@ public class GatewayFactory {
     }
 
     /**
-     * Creates a {@link PaymentGateway} based on the given {@link GatewayType}.
-     * All returned gateways are wrapped inside {@link GatewayProxy}.
+     * Returns a {@link PaymentGateway} implementation based on the given {@link GatewayType}.
+     * <p>
+     * Each created gateway is wrapped inside a {@link GatewayProxy} to apply retry and backoff strategies.
+     * </p>
      *
-     * @param type the type of payment gateway (PAYTM, RAZORPAY, etc.)
-     * @return a proxied {@link PaymentGateway} instance
-     * @throws IllegalArgumentException if the provided type is not supported
+     * @param type the type of payment gateway (e.g., PAYTM, RAZORPAY)
+     * @return a proxied {@link PaymentGateway} instance with the appropriate backoff strategy
+     * @throws IllegalArgumentException if the specified gateway type is not supported
      */
     public PaymentGateway getFactory(GatewayType type) {
         return switch (type) {
-            case PAYTM -> new GatewayProxy(new PaytmGateway(), 3);
-            case RAZORPAY -> new GatewayProxy(new RazorpayGateway(), 5);
+            case PAYTM -> new GatewayProxy(new PaytmGateway(), new LinearBackoffStrategy(5, 1000));
+            case RAZORPAY -> new GatewayProxy(new RazorpayGateway(), new ExponentialBackoffStrategy(5, 5000, true));
             default -> throw new IllegalArgumentException("Unsupported GatewayType: " + type);
         };
     }

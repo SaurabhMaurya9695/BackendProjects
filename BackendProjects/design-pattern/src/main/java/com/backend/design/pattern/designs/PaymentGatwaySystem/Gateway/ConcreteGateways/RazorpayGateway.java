@@ -55,6 +55,6 @@ public class RazorpayGateway extends PaymentGateway {
     protected boolean confirmPayment(PaymentRequest paymentRequest) {
         System.out.println("[RazorpayGateway] Razorpay confirmation completed successfully.");
         // Always true in simulation/mock implementation
-        return true;
+        return false;
     }
 }

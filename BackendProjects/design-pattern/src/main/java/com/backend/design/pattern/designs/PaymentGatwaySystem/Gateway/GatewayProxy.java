@@ -2,6 +2,7 @@ package com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway;
 
 import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.ConcreteGateways.PaytmGateway;
 import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.ConcreteGateways.RazorpayGateway;
+import com.backend.design.pattern.designs.PaymentGatwaySystem.Strategies.RetryStrategy;
 import com.backend.xjc.PaymentRequest;
 
 /**
@@ -13,17 +14,17 @@ import com.backend.xjc.PaymentRequest;
 public class GatewayProxy extends PaymentGateway {
 
     private final PaymentGateway _gateway;
-    private final int _retries;
+    private RetryStrategy _retryStrategy;
 
     /**
      * Creates a proxy for a specific {@link PaymentGateway}.
      *
      * @param paymentGateway the real gateway (e.g., {@code PaytmGateway}, {@code RazorpayGateway})
-     * @param retries        number of retries for failed payment attempts
+     * @param strategy        number of retries for failed payment attempts
      */
-    public GatewayProxy(PaymentGateway paymentGateway, int retries) {
+    public GatewayProxy(PaymentGateway paymentGateway, RetryStrategy strategy) {
         this._gateway = paymentGateway;
-        this._retries = retries;
+        _retryStrategy = strategy;
     }
 
     /**
@@ -34,27 +35,7 @@ public class GatewayProxy extends PaymentGateway {
      */
     @Override
     public final boolean processPayment(PaymentRequest request) {
-        boolean result = false;
-        int attempt = 0;
-
-        while (attempt < _retries && !result) {
-            if (attempt > 0) {
-                System.out.printf("[GatewayProxy] Retrying payment (attempt %d/%d) for Sender=%s%n", attempt + 1,
-                        _retries, request.getSenderName());
-            }
-            result = _gateway.processPayment(request);
-            attempt++;
-        }
-
-        if (!result) {
-            System.out.printf("[GatewayProxy] ❌ Failed to process payment after %d attempts | Sender=%s%n", attempt,
-                    request.getSenderName());
-        } else {
-            System.out.printf("[GatewayProxy] ✅ Payment succeeded after %d attempt(s) | Sender=%s%n", attempt,
-                    request.getSenderName());
-        }
-
-        return result;
+        return _retryStrategy.executeWithRetry(() -> _gateway.processPayment(request), request);
     }
 
     @Override
