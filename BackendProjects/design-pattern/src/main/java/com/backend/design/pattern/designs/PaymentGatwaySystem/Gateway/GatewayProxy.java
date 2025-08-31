@@ -1,81 +1,84 @@
 package com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway;
 
 import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.ConcreteGateways.PaytmGateway;
+import com.backend.design.pattern.designs.PaymentGatwaySystem.Gateway.ConcreteGateways.RazorpayGateway;
 import com.backend.xjc.PaymentRequest;
 
 /**
- * The {@code GatewayProxy} class serves as a proxy between clients and
- * concrete {@link PaymentGateway} implementations (e.g., Paytm, Razorpay).
+ * Proxy class for {@link PaymentGateway} implementations (e.g., Paytm, Razorpay).
  * <p>
- * It forwards payment operations (validation, initiation, confirmation)
- * to the actual {@code PaymentGateway} instance, while adding extra
- * behavior such as logging, monitoring, or custom checks.
- * <p>
- * This design allows extending functionalities without altering
- * the original gateway implementations, following the Proxy pattern.
+ * Ensures every payment request goes through the {@link PaymentGateway}
+ * template method while adding retry and logging behavior.
  */
 public class GatewayProxy extends PaymentGateway {
 
     private final PaymentGateway _gateway;
+    private final int _retries;
 
     /**
      * Creates a proxy for a specific {@link PaymentGateway}.
      *
      * @param paymentGateway the real gateway (e.g., {@code PaytmGateway}, {@code RazorpayGateway})
-     *                       that handles the actual payment logic
+     * @param retries        number of retries for failed payment attempts
      */
-    public GatewayProxy(PaymentGateway paymentGateway) {
-        _gateway = paymentGateway;
+    public GatewayProxy(PaymentGateway paymentGateway, int retries) {
+        this._gateway = paymentGateway;
+        this._retries = retries;
     }
 
     /**
-     * Delegates payment validation to the underlying gateway while logging
-     * the delegation details.
+     * Processes a payment using the template method with retry support.
      *
-     * @param req the payment request to validate
-     * @return {@code true} if the request is valid, {@code false} otherwise
+     * @param request the payment request
+     * @return {@code true} if payment succeeds, {@code false} otherwise
      */
     @Override
-    protected boolean validatePayment(PaymentRequest req) {
-        if (_gateway instanceof PaytmGateway) {
-            System.out.println("[GatewayProxy] Delegating Req to PaytmGateway -> validatePayment");
-        } else {
-            System.out.println("[GatewayProxy] Delegating Req to RazorpayGateway -> validatePayment");
+    public final boolean processPayment(PaymentRequest request) {
+        boolean result = false;
+        int attempt = 0;
+
+        while (attempt < _retries && !result) {
+            if (attempt > 0) {
+                System.out.printf("[GatewayProxy] Retrying payment (attempt %d/%d) for Sender=%s%n", attempt + 1,
+                        _retries, request.getSenderName());
+            }
+            result = _gateway.processPayment(request);
+            attempt++;
         }
+
+        if (!result) {
+            System.out.printf("[GatewayProxy] ❌ Failed to process payment after %d attempts | Sender=%s%n", attempt,
+                    request.getSenderName());
+        } else {
+            System.out.printf("[GatewayProxy] ✅ Payment succeeded after %d attempt(s) | Sender=%s%n", attempt,
+                    request.getSenderName());
+        }
+
+        return result;
+    }
+
+    @Override
+    protected boolean validatePayment(PaymentRequest req) {
+        logDelegation("validatePayment");
         return _gateway.validatePayment(req);
     }
 
-    /**
-     * Delegates payment initiation to the underlying gateway while logging
-     * the delegation details.
-     *
-     * @param request the payment request to initiate
-     * @return {@code true} if the initiation is successful, {@code false} otherwise
-     */
     @Override
     protected boolean initiatePayment(PaymentRequest request) {
-        if (_gateway instanceof PaytmGateway) {
-            System.out.println("[GatewayProxy] Delegating Req to PaytmGateway -> initiatePayment");
-        } else {
-            System.out.println("[GatewayProxy] Delegating Req to RazorpayGateway -> initiatePayment");
-        }
+        logDelegation("initiatePayment");
         return _gateway.initiatePayment(request);
     }
 
-    /**
-     * Delegates payment confirmation to the underlying gateway while logging
-     * the delegation details.
-     *
-     * @param paymentRequest the payment request to confirm
-     * @return {@code true} if the confirmation succeeds, {@code false} otherwise
-     */
     @Override
-    protected boolean confirmPayment(PaymentRequest paymentRequest) {
-        if (_gateway instanceof PaytmGateway) {
-            System.out.println("[GatewayProxy] Delegating Req to PaytmGateway -> confirmPayment");
-        } else {
-            System.out.println("[GatewayProxy] Delegating Req to RazorpayGateway -> confirmPayment");
-        }
-        return _gateway.confirmPayment(paymentRequest);
+    protected boolean confirmPayment(PaymentRequest request) {
+        logDelegation("confirmPayment");
+        return _gateway.confirmPayment(request);
+    }
+
+    private void logDelegation(String method) {
+        String gatewayName = (_gateway instanceof PaytmGateway) ? "PaytmGateway"
+                : (_gateway instanceof RazorpayGateway) ? "RazorpayGateway" : _gateway.getClass().getSimpleName();
+
+        System.out.println("[GatewayProxy] Delegating Req to " + gatewayName + " -> " + method);
     }
 }

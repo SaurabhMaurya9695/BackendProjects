@@ -20,57 +20,38 @@ public abstract class PaymentGateway {
 
     /**
      * Template method for processing a payment.
-     * <p>
-     * Executes the complete payment flow by delegating step-specific logic
-     * to subclasses. If any step fails, the process is aborted and {@code false}
-     * is returned.
-     * </p>
      *
      * @param request the {@link PaymentRequest} containing payment details
      * @return {@code true} if the entire process completes successfully,
      * {@code false} otherwise
      */
-    public final boolean processPayment(PaymentRequest request) {
+    public boolean processPayment(PaymentRequest request) {
+        System.out.printf("[PaymentGateway] Starting payment flow | Sender=%s | Receiver=%s | Amount=%.2f %s%n",
+                request.getSenderName(), request.getReceiverName(), request.getAmount(), request.getCurrency());
+
         if (!validatePayment(request)) {
-            System.out.println("[PaymentGateway] Validation failed for sender " + request.getSenderName());
+            System.out.printf("[PaymentGateway] ❌ Validation failed for Sender=%s%n", request.getSenderName() + "\n");
             return false;
         }
 
         if (!initiatePayment(request)) {
-            System.out.println("[PaymentGateway] Initiation failed for sender " + request.getSenderName());
+            System.out.printf("[PaymentGateway] ❌ Initiation failed for Sender=%s%n", request.getSenderName() + "\n");
             return false;
         }
 
         if (!confirmPayment(request)) {
-            System.out.println("[PaymentGateway] Confirmation failed for sender " + request.getSenderName());
+            System.out.printf("[PaymentGateway] ❌ Confirmation failed for Sender=%s%n", request.getSenderName() + "\n");
             return false;
         }
 
-        System.out.println("[PaymentGateway] Process Payment is Successful for sender " + request.getSenderName());
+        System.out.printf("[PaymentGateway] ✅ Payment SUCCESS | Sender=%s | Receiver=%s | Amount=%.2f %s%n",
+                request.getSenderName(), request.getReceiverName(), request.getAmount(), request.getCurrency());
         return true;
     }
 
-    /**
-     * Validates the payment request before processing.
-     *
-     * @param paymentRequest the payment request to validate
-     * @return {@code true} if validation succeeds, {@code false} otherwise
-     */
     protected abstract boolean validatePayment(PaymentRequest paymentRequest);
 
-    /**
-     * Initiates the payment after successful validation.
-     *
-     * @param paymentRequest the payment request to initiate
-     * @return {@code true} if initiation succeeds, {@code false} otherwise
-     */
     protected abstract boolean initiatePayment(PaymentRequest paymentRequest);
 
-    /**
-     * Confirms the payment after initiation.
-     *
-     * @param paymentRequest the payment request to confirm
-     * @return {@code true} if confirmation succeeds, {@code false} otherwise
-     */
     protected abstract boolean confirmPayment(PaymentRequest paymentRequest);
 }

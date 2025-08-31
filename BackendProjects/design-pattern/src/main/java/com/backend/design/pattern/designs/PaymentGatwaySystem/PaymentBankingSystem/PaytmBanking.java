@@ -24,6 +24,6 @@ public class PaytmBanking implements IBankingSystem {
     @Override
     public boolean processPayment(double amount) {
         System.out.println("[PaytmBanking] Processing amount: " + amount);
-        return false;
+        return true;
     }
 }

@@ -87,6 +87,6 @@ public class PaytmGateway extends PaymentGateway {
     @Override
     protected boolean confirmPayment(PaymentRequest paymentRequest) {
         System.out.println("[PaytmGateway] Paytm Confirmation is done ");
-        return true;
+        return false;
     }
 }

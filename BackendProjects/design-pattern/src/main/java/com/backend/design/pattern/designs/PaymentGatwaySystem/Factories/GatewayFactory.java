@@ -67,8 +67,8 @@ public class GatewayFactory {
      */
     public PaymentGateway getFactory(GatewayType type) {
         return switch (type) {
-            case PAYTM -> new GatewayProxy(new PaytmGateway());
-            case RAZORPAY -> new GatewayProxy(new RazorpayGateway());
+            case PAYTM -> new GatewayProxy(new PaytmGateway(), 3);
+            case RAZORPAY -> new GatewayProxy(new RazorpayGateway(), 5);
             default -> throw new IllegalArgumentException("Unsupported GatewayType: " + type);
         };
     }
