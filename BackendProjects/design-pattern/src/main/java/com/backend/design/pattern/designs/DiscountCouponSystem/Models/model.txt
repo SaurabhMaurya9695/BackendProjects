@@ -1,0 +1,1 @@
+You need to run "clean install," your model & enum class will be generated inside the target/xjc folder

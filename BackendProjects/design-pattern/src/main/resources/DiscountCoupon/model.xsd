@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           targetNamespace="http://www.backend.com/models"
+           xmlns="http://www.backend.com/models"
+           elementFormDefault="qualified">
+
+    <xs:complexType name="Product">
+        <xs:sequence>
+            <xs:element name="productName" type="xs:string"/>
+            <xs:element name="productCategory" type="xs:string"/>
+            <xs:element name="productPrice" type="xs:double"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CartItem">
+        <xs:sequence>
+            <xs:element name="product" type="Product"/>
+            <xs:element name="quantity" type="xs:int"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="DiscountStrategyType">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="FLAT"/>
+            <xs:enumeration value="PERCENTAGE"/>
+            <xs:enumeration value="PERCENTAGE_WITH_CAP"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+</xs:schema>
