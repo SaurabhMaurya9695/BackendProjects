@@ -16,7 +16,7 @@ public class ProductFactory {
      * @return a {@link ZProduct} instance, or a product with only SKU set if unknown
      */
     public static ZProduct createProduct(int sku) {
-        ZProduct.ZProductBuilder builder = ZProduct.builder();
+        ZProduct zProduct = new ZProduct();
         String productName = null;
         double price = 0;
 
@@ -41,9 +41,11 @@ public class ProductFactory {
         }
 
         if (productName != null) {
-            builder.price(price).sku(sku).productName(productName);
+            zProduct.setProductName(productName);
+            zProduct.setPrice(price);
+            zProduct.setSku(sku);
         }
 
-        return builder.build();
+        return zProduct;
     }
 }

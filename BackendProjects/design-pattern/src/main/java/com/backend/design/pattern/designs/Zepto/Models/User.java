@@ -1,23 +1,12 @@
 package com.backend.design.pattern.designs.Zepto.Models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
 
 import com.backend.design.pattern.designs.Zepto.Others.Cart;
 
 /**
  * Represents a user in the Zepto system.
  */
-@Setter
-@Getter
-@ToString
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Builder
+
 public class User {
 
     /**
@@ -52,5 +41,37 @@ public class User {
         this.x = x;
         this.y = y;
         cart = new Cart();
+    }
+
+    public String getUserName() {
+        return userName;
+    }
+
+    public void setUserName(String userName) {
+        this.userName = userName;
+    }
+
+    public double getX() {
+        return x;
+    }
+
+    public void setX(double x) {
+        this.x = x;
+    }
+
+    public double getY() {
+        return y;
+    }
+
+    public void setY(double y) {
+        this.y = y;
+    }
+
+    public Cart getCart() {
+        return cart;
+    }
+
+    public void setCart(Cart cart) {
+        this.cart = cart;
     }
 }

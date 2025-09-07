@@ -1,21 +1,8 @@
 package com.backend.design.pattern.designs.Zepto.Models;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
-import lombok.ToString;
-
 /**
  * Represents a product in the Zepto system.
  */
-@Setter
-@Getter
-@AllArgsConstructor
-@RequiredArgsConstructor
-@Builder
-@ToString
 public class ZProduct {
 
     /**
@@ -32,4 +19,37 @@ public class ZProduct {
      * Price of the product.
      */
     private double price;
+
+    public ZProduct() {
+    }
+
+    public ZProduct(int sku, String productName, double price) {
+        this.sku = sku;
+        this.productName = productName;
+        this.price = price;
+    }
+
+    public int getSku() {
+        return sku;
+    }
+
+    public void setSku(int sku) {
+        this.sku = sku;
+    }
+
+    public String getProductName() {
+        return productName;
+    }
+
+    public void setProductName(String productName) {
+        this.productName = productName;
+    }
+
+    public double getPrice() {
+        return price;
+    }
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }
