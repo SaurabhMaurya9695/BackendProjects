@@ -1,0 +1,6 @@
+1: We should be able to manage inventory (add, remove, etc.).
+2: We should have scalable replenishment strategies (e.g., threshold-based, weekly).
+3: We can support multiple inventory stores (e.g., DB inventory store), and this should be easily extendable.
+4: Users should be able to view all items available in the nearest dark store (within 5 KM).
+5: If a single dark store cannot fulfill an order, the order can be split across multiple dark stores and fulfilled by
+multiple delivery agents.
