@@ -112,6 +112,14 @@ BackendProjects/
    - Observer pattern for event handling
    - Bridge pattern for platform abstraction
 
+8. **💕 Tinder Dating App**
+   - Singleton pattern for app instance management
+   - Factory pattern for matching algorithm creation
+   - Strategy pattern for location-based services
+   - Observer pattern for real-time notifications
+   - Matching algorithms with score calculation
+   - Chat room functionality with message handling
+
 ### 🧮 Data Structures & Algorithms (`dsa/`)
 
 **Comprehensive DSA implementations organized by categories:**
