@@ -49,6 +49,7 @@ BackendProjects/
 #### Behavioral Patterns
 - **Chain of Responsibility**: Approval workflow system
 - **Command Pattern**: Remote controller implementation with undo/redo
+- **Iterator Pattern**: Traverse collections uniformly (LinkedList, BinaryTree, Playlist)
 - **Observer Pattern**: Publisher-subscriber notification system
 - **Strategy Pattern**: Flexible sorting algorithms
 - **Template Method**: Neural network training framework
@@ -57,6 +58,7 @@ BackendProjects/
 - **Abstract Factory**: Cross-platform UI components
 - **Builder Pattern**: Complex object construction (Burger builder)
 - **Factory Pattern**: Operating system abstraction
+- **Flyweight Pattern**: Memory-efficient object sharing (Asteroid game with intrinsic/extrinsic state)
 - **Prototype Pattern**: Vehicle registry with cloning
 - **Singleton Pattern**: Multiple implementations (Eager, Lazy, Thread-safe, Enum-based)
 
@@ -227,7 +229,6 @@ mvn exec:java -pl entry-point -Dexec.mainClass="com.backend.EntryPoint"
 # For design principles
 mvn exec:java -pl entry-point -Dexec.mainClass="com.backend.EntryPointForDesignPrinciple"
 
-
 ## 🔧 Build & Development
 
 ### Maven Commands
@@ -265,12 +266,12 @@ mvn clean generate-sources -pl design-pattern
 ## 📊 Project Statistics
 
 - **Total Modules**: 6
-- **Design Patterns**: 15+ patterns across 3 categories
-- **System Designs**: 7 real-world applications
+- **Design Patterns**: 17+ patterns across 3 categories
+- **System Designs**: 8 real-world applications
 - **DSA Problems**: 100+ implementations
 - **Tree Algorithms**: 49 different implementations
 - **DP Problems**: 20+ variations
-- **Lines of Code**: 10,000+
+- **Lines of Code**: 12,000+
 
 ## 🎯 Learning Path Recommendations
 
@@ -283,8 +284,10 @@ mvn clean generate-sources -pl design-pattern
 ### For Intermediate:
 1. Study system design implementations in `designs/`
 2. Explore behavioral and structural patterns
-3. Tackle dynamic programming problems
-4. Understand tree algorithms
+3. Learn Iterator pattern for collection traversal
+4. Understand Flyweight pattern for memory optimization
+5. Tackle dynamic programming problems
+6. Understand tree algorithms
 
 ### For Advanced:
 1. Analyze complete system architectures
@@ -300,6 +303,34 @@ mvn clean generate-sources -pl design-pattern
 - ✅ **Modular Architecture**: Clean separation of concerns
 - ✅ **Extensible Design**: Easy to add new patterns or algorithms
 - ✅ **Educational Focus**: Perfect for learning and teaching
+
+## 🆕 Recently Added Patterns
+
+### Iterator Pattern (`behavioural/iterator/`)
+**Provides uniform traversal across different collection types:**
+- **LinkedList Iterator**: Sequential traversal of linked list nodes
+- **BinaryTree Iterator**: Inorder traversal using stack-based algorithm  
+- **Playlist Iterator**: Index-based traversal of song collections
+- **Key Benefits**: Uniform interface, multiple simultaneous iterations, encapsulation of traversal logic
+
+### Flyweight Pattern (`creational/flyWeight/`)
+**Demonstrates memory optimization through object sharing:**
+- **Without Flyweight**: Each asteroid object stores duplicate intrinsic data (color, texture, material)
+- **With Flyweight**: Shares intrinsic state among objects, stores only extrinsic state per instance
+- **Memory Savings**: Reduces memory usage from ~140MB to ~20MB for 1 million objects
+- **Use Case**: Space game with millions of similar asteroids
+
+### Key Demonstrations:
+```bash
+# Compare memory usage - 1 million asteroids without flyweight
+mvn exec:java -pl design-pattern -Dexec.mainClass="com.backend.design.pattern.creational.flyWeight.WithoutFlyWeight.WithoutFlyWeight"
+
+# Compare memory usage - 1 million asteroids with flyweight optimization  
+mvn exec:java -pl design-pattern -Dexec.mainClass="com.backend.design.pattern.creational.flyWeight.WithFlyWeight.withFlyWeight"
+
+# Iterator pattern demonstration with different collection types
+mvn exec:java -pl design-pattern -Dexec.mainClass="com.backend.design.pattern.behavioural.iterator.IteratorPatternDemo"
+```
 
 ## 🤝 Contributing
 
