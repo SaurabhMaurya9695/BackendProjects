@@ -1,0 +1,329 @@
+@startuml TicTacToe_Class_Diagram
+
+' ============================================
+' TICTACTOE GAME - COMPLETE UML CLASS DIAGRAM
+' Demonstrates SOLID Principles & Design Patterns
+' ============================================
+
+title TicTacToe Game - Class Diagram\n(SOLID Principles & Design Patterns)
+
+skinparam classAttributeIconSize 0
+skinparam backgroundColor #F9F9F9
+skinparam class {
+    BackgroundColor<<Strategy>> LightBlue
+    BackgroundColor<<Observer>> LightGreen
+    BackgroundColor<<Subject>> LightGreen
+    BackgroundColor<<Model>> Wheat
+    BackgroundColor<<Controller>> LightYellow
+    BackgroundColor<<Client>> LightCoral
+}
+
+' ============================================
+' MODEL CLASSES
+' ============================================
+
+package "model" {
+    
+    class Board <<Model>> {
+        - rows: int
+        - cols: int
+        - cells: Symbol[][]
+        - filledCells: int
+        __
+        + Board(size: int)
+        + Board(rows: int, cols: int)
+        + makeMove(row: int, col: int, symbol: Symbol): void
+        + getCell(row: int, col: int): Symbol
+        + isCellEmpty(row: int, col: int): boolean
+        + isValidPosition(row: int, col: int): boolean
+        + isFull(): boolean
+        + reset(): void
+        + getBoardState(): String
+        + getRows(): int
+        + getCols(): int
+        - initializeBoard(): void
+    }
+    
+    class Player <<Model>> {
+        - playerID: UUID
+        - playerName: String
+        - symbol: Symbol
+        - score: int
+        __
+        + Player(playerName: String, symbol: Symbol)
+        + getPlayerID(): UUID
+        + getPlayerName(): String
+        + getSymbol(): Symbol
+        + getScore(): int
+        + incrementScore(): void
+        + equals(o: Object): boolean
+        + hashCode(): int
+        + toString(): String
+    }
+    
+    class Symbol <<Model>> {
+        - symbol: Character
+        + {static} EMPTY: Symbol
+        __
+        + Symbol()
+        + Symbol(symbol: Character)
+        + getSymbol(): Character
+        + isEmpty(): boolean
+        + equals(o: Object): boolean
+        + hashCode(): int
+        + toString(): String
+    }
+    
+    class Move <<Model>> {
+        - row: int
+        - col: int
+        - player: Player
+        __
+        + Move(row: int, col: int, player: Player)
+        + getRow(): int
+        + getCol(): int
+        + getPlayer(): Player
+        + getSymbol(): Symbol
+        + equals(o: Object): boolean
+        + hashCode(): int
+        + toString(): String
+    }
+    
+    enum GameState <<Model>> {
+        NOT_STARTED
+        IN_PROGRESS
+        PLAYER_WON
+        DRAW
+        ABORTED
+    }
+}
+
+' ============================================
+' STRATEGY PATTERN
+' ============================================
+
+package "Strategy" {
+    
+    interface WinStrategy <<Strategy>> {
+        + {abstract} checkWin(board: Board, symbol: Symbol): boolean
+    }
+    
+    class StandardWinStrategy <<Strategy>> {
+        + checkWin(board: Board, symbol: Symbol): boolean
+        - checkRows(board: Board, symbol: Symbol): boolean
+        - checkColumns(board: Board, symbol: Symbol): boolean
+        - checkDiagonals(board: Board, symbol: Symbol): boolean
+    }
+}
+
+' ============================================
+' OBSERVER PATTERN
+' ============================================
+
+package "Notifications" {
+    
+    interface GameObserver <<Observer>> {
+        + {abstract} onMoveMade(move: Move, opponent: Player): void
+        + {abstract} onPlayerWon(winner: Player): void
+        + {abstract} onGameDraw(): void
+        + {abstract} onGameStart(player1: Player, player2: Player): void
+        + {abstract} onGameReset(): void
+    }
+    
+    interface GameSubject <<Subject>> {
+        + {abstract} attach(observer: GameObserver): void
+        + {abstract} detach(observer: GameObserver): void
+        + {abstract} notifyObservers(): void
+    }
+    
+    class ConsoleGameObserver <<Observer>> {
+        - {static} SEPARATOR: String
+        __
+        + onMoveMade(move: Move, opponent: Player): void
+        + onPlayerWon(winner: Player): void
+        + onGameDraw(): void
+        + onGameStart(player1: Player, player2: Player): void
+        + onGameReset(): void
+    }
+}
+
+' ============================================
+' GAME ENGINE
+' ============================================
+
+class TicTacToeGame <<Controller>> {
+    - board: Board
+    - winStrategy: WinStrategy
+    - observers: List<GameObserver>
+    - player1: Player
+    - player2: Player
+    - gameState: GameState
+    - currentPlayer: Player
+    - winner: Player
+    __
+    + TicTacToeGame(board: Board, player1: Player, \n    player2: Player, winStrategy: WinStrategy)
+    + startGame(): void
+    + makeMove(row: int, col: int): void
+    + resetGame(): void
+    + attach(observer: GameObserver): void
+    + detach(observer: GameObserver): void
+    + notifyObservers(): void
+    + getGameState(): GameState
+    + getCurrentPlayer(): Player
+    + getWinner(): Player
+    + getBoard(): Board
+    + getPlayer1(): Player
+    + getPlayer2(): Player
+    + isGameOver(): boolean
+    - getOpponent(player: Player): Player
+    - notifyMoveMade(move: Move, opponent: Player): void
+    - notifyPlayerWon(winner: Player): void
+    - notifyGameDraw(): void
+    - notifyGameStart(): void
+    - notifyGameReset(): void
+}
+
+' ============================================
+' CONTROLLER
+' ============================================
+
+class GameController <<Controller>> {
+    - game: TicTacToeGame
+    - scanner: Scanner
+    __
+    + GameController(game: TicTacToeGame)
+    + start(): void
+    - playGame(): void
+    - getPlayerMove(): int[]
+    - getValidInteger(): int
+    - askPlayAgain(): boolean
+    - displayBoard(): void
+    - printFinalScores(): void
+}
+
+' ============================================
+' CLIENT
+' ============================================
+
+class Client <<Client>> {
+    + {static} main(args: String[]): void
+    - {static} createBoard(): Board
+    - {static} createPlayer1(): Player
+    - {static} createPlayer2(): Player
+    - {static} createWinStrategy(): WinStrategy
+}
+
+' ============================================
+' RELATIONSHIPS
+' ============================================
+
+' Strategy Pattern
+WinStrategy <|.. StandardWinStrategy : implements
+TicTacToeGame o--> WinStrategy : uses
+
+' Observer Pattern
+GameObserver <|.. ConsoleGameObserver : implements
+GameSubject <|.. TicTacToeGame : implements
+TicTacToeGame o--> "0..*" GameObserver : notifies
+
+' Composition Relationships
+TicTacToeGame *--> Board : contains
+TicTacToeGame *--> "2" Player : contains
+TicTacToeGame --> GameState : uses
+Board *--> "many" Symbol : contains
+Move --> Player : references
+Move --> Symbol : uses
+Player --> Symbol : has
+
+' Dependencies
+TicTacToeGame ..> Move : creates
+GameController --> TicTacToeGame : controls
+Client ..> Board : creates
+Client ..> Player : creates
+Client ..> WinStrategy : creates
+Client ..> TicTacToeGame : creates
+Client ..> GameController : creates
+Client ..> GameObserver : creates
+
+' Observer notifications
+ConsoleGameObserver ..> Move : displays
+ConsoleGameObserver ..> Player : displays
+
+' ============================================
+' DESIGN PATTERNS LEGEND
+' ============================================
+
+legend top right
+    |= Pattern |= Classes |
+    | **Strategy Pattern** | WinStrategy, StandardWinStrategy |
+    | **Observer Pattern** | GameObserver, GameSubject, ConsoleGameObserver |
+    | **Value Object** | Symbol, Move |
+    | **Factory Method** | Client factory methods |
+    
+    |= SOLID Principle |= How Implemented |
+    | **SRP** | Each class has single responsibility |
+    | **OCP** | Extensible via interfaces (WinStrategy, GameObserver) |
+    | **LSP** | Interfaces properly designed |
+    | **ISP** | Focused interfaces, no fat interfaces |
+    | **DIP** | Depends on abstractions (interfaces) |
+endlegend
+
+' ============================================
+' NOTES
+' ============================================
+
+note top of TicTacToeGame
+    **Main Game Engine**
+    - Implements GameSubject (Observer Pattern)
+    - Uses WinStrategy (Strategy Pattern)
+    - Manages game flow and state
+    - Notifies observers on every move
+    - Follows Dependency Inversion Principle
+end note
+
+note right of WinStrategy
+    **Strategy Pattern**
+    Allows different win conditions:
+    - Standard 3-in-a-row
+    - Diagonal only
+    - 4-in-a-row (for larger boards)
+    - Custom rules
+end note
+
+note right of GameObserver
+    **Observer Pattern**
+    Enables real-time notifications:
+    - Console notifications
+    - GUI updates
+    - Sound effects
+    - Email/SMS alerts
+    - Game logging
+end note
+
+note bottom of Board
+    **Encapsulation**
+    - Validates all moves
+    - Manages board state
+    - Immutable cells array
+    - Throws exceptions for invalid moves
+end note
+
+note bottom of Symbol
+    **Value Object Pattern**
+    - Immutable
+    - Implements equals/hashCode
+    - Thread-safe
+end note
+
+note bottom of Client
+    **Dependency Injection**
+    All dependencies are:
+    - Created in Client
+    - Injected via constructors
+    - Based on interfaces
+    
+    Follows Factory Method Pattern
+end note
+
+@enduml
+

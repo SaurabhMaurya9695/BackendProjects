@@ -1,0 +1,43 @@
+╔═══════════════════════════════════════════════════════════════════════════════╗
+║                     VIEW YOUR UML CLASS DIAGRAM AS IMAGE                      ║
+╚═══════════════════════════════════════════════════════════════════════════════╝
+
+🎯 EASIEST METHOD (No Installation Required):
+
+1. Click this link: https://www.plantuml.com/plantuml/uml/
+
+2. Open the file: TicTacToe_UML.puml (in this same folder)
+
+3. Copy ALL the text from that file (Ctrl+A, Ctrl+C)
+
+4. Paste it into the PlantUML website
+
+5. Press ENTER or click Submit
+
+6. ✅ You'll see the full class diagram with all interactions!
+
+7. Right-click → "Save image as..." to save as PNG
+
+═══════════════════════════════════════════════════════════════════════════════
+
+📱 ALTERNATIVE - Direct Link (may need to refresh):
+
+Visit: https://www.plantuml.com/plantuml/png/
+
+Then copy-paste the PlantUML code
+
+═══════════════════════════════════════════════════════════════════════════════
+
+🎨 What You'll See:
+
+• All 13 classes with their methods and fields
+• Color-coded by design pattern (Strategy=Blue, Observer=Green)
+• Arrows showing how classes interact
+• Complete class relationships
+• Design pattern implementations
+• SOLID principles legend
+
+═══════════════════════════════════════════════════════════════════════════════
+
+The diagram shows EVERYTHING you need to understand the architecture! 🚀
+
