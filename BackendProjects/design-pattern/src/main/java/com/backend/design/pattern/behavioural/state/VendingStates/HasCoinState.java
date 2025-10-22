@@ -6,45 +6,50 @@ import com.backend.design.pattern.behavioural.state.VendingState;
 public class HasCoinState implements VendingState {
 
     @Override
-    public VendingState insertCoin(VendingMachine vendingMachine, int coin) {
-        vendingMachine.addCoin(coin);
-        System.out.println("Adding Inserted Coin, Current Balance is : " + vendingMachine.getInsertedCoins());
-        return vendingMachine.getHasCoinState(); // Transition into HasCoinState if you have
+    public VendingState insertCoin(VendingMachine machine, int coin) {
+        System.out.println("Adding more coins: " + coin);
+        machine.addCoins(coin);
+        System.out.println("Current balance: " + machine.getInsertedCoins());
+        return this;
     }
 
     @Override
-    public VendingState selectItem(VendingMachine vendingMachine) {
-        // check the price, SelectedItemPrice and currentCoin which user gives should be more >=
-        if (vendingMachine.getInsertedCoins() >= vendingMachine.getItemPrice()) {
-            System.out.println("Starting Dispensing Item");
-            int change = vendingMachine.getInsertedCoins() - vendingMachine.getItemPrice();
+    public VendingState selectItem(VendingMachine machine) {
+        int balance = machine.getInsertedCoins();
+        int price = machine.getItemPrice();
+
+        if (balance >= price) {
+            System.out.println("Item selected. Price: " + price);
+            int change = balance - price;
             if (change > 0) {
-                System.out.println("returning : " + change + " money to user back");
+                System.out.println("Returning change: " + change);
             }
-            vendingMachine.setInsertedCoins(0);
-            return vendingMachine.getDispenseCoinState(); // changed the state
+            machine.resetCoins();
+            return machine.getDispenseState();
         } else {
-            int needed = vendingMachine.getItemPrice() - vendingMachine.getInsertedCoins();
-            System.out.println("Insufficient Balance : " + needed);
-            return vendingMachine.getHasCoinState(); // stay in the same state
+            int needed = price - balance;
+            System.out.println("Insufficient balance! Need " + needed + " more");
+            return this;
         }
     }
 
     @Override
-    public VendingState dispenseItem(VendingMachine vendingMachine) {
-        System.out.println("Please Insert Coin & Select Item first");
-        return vendingMachine.getHasCoinState(); // State isn't changed
+    public VendingState dispenseItem(VendingMachine machine) {
+        System.out.println("Please select item first!");
+        return this;
     }
 
     @Override
-    public VendingState returnCoin(VendingMachine vendingMachine) {
-        System.out.println("No Coins to return !!");
-        return vendingMachine.getHasCoinState(); // State isn't changed
+    public VendingState returnCoin(VendingMachine machine) {
+        int coins = machine.getInsertedCoins();
+        System.out.println("Returning coins: " + coins);
+        machine.resetCoins();
+        return machine.getNoCoinState();
     }
 
     @Override
-    public VendingState refill(VendingMachine vendingMachine, int quantity) {
-        vendingMachine.getItemCount(quantity);
-        return vendingMachine.getNoCoinState(); // State isn't changed
+    public VendingState refill(VendingMachine machine, int quantity) {
+        System.out.println("Cannot refill while transaction is in progress");
+        return this;
     }
 }

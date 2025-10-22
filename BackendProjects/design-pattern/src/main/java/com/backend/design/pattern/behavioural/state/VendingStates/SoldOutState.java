@@ -3,25 +3,24 @@ package com.backend.design.pattern.behavioural.state.VendingStates;
 import com.backend.design.pattern.behavioural.state.VendingMachine;
 import com.backend.design.pattern.behavioural.state.VendingState;
 
-public class NoCoinState implements VendingState {
+public class SoldOutState implements VendingState {
 
     @Override
     public VendingState insertCoin(VendingMachine machine, int coin) {
-        System.out.println("Coin inserted: " + coin);
-        machine.addCoins(coin);
-        System.out.println("Current balance: " + machine.getInsertedCoins());
-        return machine.getHasCoinState();
+        System.out.println("Machine is sold out! Cannot accept coins.");
+        System.out.println("Returning coin: " + coin);
+        return this;
     }
 
     @Override
     public VendingState selectItem(VendingMachine machine) {
-        System.out.println("Please insert coin first!");
+        System.out.println("Machine is sold out! No items available.");
         return this;
     }
 
     @Override
     public VendingState dispenseItem(VendingMachine machine) {
-        System.out.println("Please insert coin and select item first!");
+        System.out.println("Machine is sold out! Cannot dispense.");
         return this;
     }
 
@@ -35,7 +34,8 @@ public class NoCoinState implements VendingState {
     public VendingState refill(VendingMachine machine, int quantity) {
         System.out.println("Refilling " + quantity + " items");
         machine.addItems(quantity);
-        System.out.println("Total items: " + machine.getItemCount());
-        return this;
+        System.out.println("Machine restocked! Total items: " + machine.getItemCount());
+        return machine.getNoCoinState();
     }
 }
+
