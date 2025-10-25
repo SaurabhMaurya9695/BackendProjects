@@ -129,31 +129,31 @@ public class ChessDemo {
             // Move 1: White e2-e4
             System.out.println("\n--- Move 1: White e4 ---");
             match.makeMove(Position.fromNotation("e2"), Position.fromNotation("e4"), aditya);
-
+            match.displayBoard();
             // Move 1: Black e7-e5
             System.out.println("\n--- Move 1: Black e5 ---");
             match.makeMove(Position.fromNotation("e7"), Position.fromNotation("e5"), rohit);
-
+            match.displayBoard();
             // Move 2: White Bf1-c4
             System.out.println("\n--- Move 2: White Bc4 (targeting f7) ---");
             match.makeMove(Position.fromNotation("f1"), Position.fromNotation("c4"), aditya);
-
+            match.displayBoard();
             // Move 2: Black Nb8-c6
             System.out.println("\n--- Move 2: Black Nc6 ---");
             match.makeMove(Position.fromNotation("b8"), Position.fromNotation("c6"), rohit);
-
+            match.displayBoard();
             // Move 3: White Qd1-h5
             System.out.println("\n--- Move 3: White Qh5 (attacking f7) ---");
             match.makeMove(Position.fromNotation("d1"), Position.fromNotation("h5"), aditya);
-
+            match.displayBoard();
             // Move 3: Black Ng8-f6??
             System.out.println("\n--- Move 3: Black Nf6 (mistake!) ---");
             match.makeMove(Position.fromNotation("g8"), Position.fromNotation("f6"), rohit);
-
+            match.displayBoard();
             // Move 4: White Qh5xf7# (Checkmate!)
             System.out.println("\n--- Move 4: White Qxf7# (CHECKMATE!) ---");
             match.makeMove(Position.fromNotation("h5"), Position.fromNotation("f7"), aditya);
-
+            match.displayBoard();
         } catch (ChessException e) {
             System.err.println("Error during game: " + e.getMessage());
             e.printStackTrace();
