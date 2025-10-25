@@ -14,9 +14,9 @@
         <version>1.0.0-SNAPSHOT</version>
     </parent>
 
-    <groupId>com.backend.design.principles</groupId>
-    <artifactId>design-principles</artifactId>
-    <name>Design-Principles</name>
+    <groupId>com.backend.system.design</groupId>
+    <artifactId>System-design</artifactId>
+    <name>System-design</name>
     <packaging>jar</packaging>
 <!--    <version>1.0.0-SNAPSHOT</version>-->
 

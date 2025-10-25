@@ -15,7 +15,7 @@
     <modules>
         <module>design-pattern</module>
         <module>dist</module>
-        <module>design-principles</module>
+        <module>system-design</module>
         <module>entry-point</module>
         <module>dsa</module>
         <module>xjc-plugin</module>

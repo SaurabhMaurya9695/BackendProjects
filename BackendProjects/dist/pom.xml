@@ -25,8 +25,8 @@
 
         <!-- Design Principles dependencies -->
         <dependency>
-            <groupId>com.backend.design.principles</groupId>
-            <artifactId>design-principles</artifactId>
+            <groupId>com.backend.system.design</groupId>
+            <artifactId>System-design</artifactId>
             <version>${project.parent.version}</version>
         </dependency>
 
