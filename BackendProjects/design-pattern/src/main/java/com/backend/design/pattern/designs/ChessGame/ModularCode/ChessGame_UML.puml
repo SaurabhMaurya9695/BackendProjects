@@ -1,0 +1,543 @@
+@startuml ChessGame_ModularCode_Complete_UML
+!theme plain
+skinparam linetype ortho
+skinparam packageStyle rectangle
+skinparam classAttributeIconSize 0
+
+title Modular Chess Game System - Complete UML Diagram\n(SOLID Principles & Design Patterns)
+
+' Color coding for design patterns
+skinparam class {
+    BackgroundColor<<Singleton>> LightYellow
+    BackgroundColor<<Factory>> LightGreen
+    BackgroundColor<<Strategy>> LightBlue
+    BackgroundColor<<Observer>> LightPink
+    BackgroundColor<<Mediator>> LightCyan
+    BackgroundColor<<Command>> Wheat
+    BackgroundColor<<ValueObject>> WhiteSmoke
+}
+
+package "model (Value Objects)" #DDDDDD {
+    enum Color <<ValueObject>> {
+        WHITE
+        BLACK
+        --
+        +opposite(): Color
+    }
+    
+    enum PieceType <<ValueObject>> {
+        KING
+        QUEEN
+        ROOK
+        BISHOP
+        KNIGHT
+        PAWN
+        --
+        +getSymbol(): String
+    }
+    
+    enum GameStatus <<ValueObject>> {
+        WAITING
+        IN_PROGRESS
+        COMPLETED
+        ABORTED
+    }
+    
+    enum GameResult <<ValueObject>> {
+        WHITE_WINS
+        BLACK_WINS
+        DRAW
+        IN_PROGRESS
+    }
+    
+    enum MoveType <<ValueObject>> {
+        NORMAL
+        CAPTURE
+        CASTLING
+        EN_PASSANT
+        PROMOTION
+    }
+    
+    class Position <<ValueObject>> {
+        -row: int
+        -col: int
+        --
+        +Position(row: int, col: int)
+        +fromNotation(notation: String): Position
+        +getRow(): int
+        +getCol(): int
+        +toChessNotation(): String
+        +offset(deltaRow: int, deltaCol: int): Position
+        +equals(obj: Object): boolean
+        +hashCode(): int
+    }
+    
+    class Move <<ValueObject>> {
+        -from: Position
+        -to: Position
+        -piece: Piece
+        -capturedPiece: Piece
+        -moveType: MoveType
+        -promotionType: PieceType
+        --
+        +Move(from, to, piece, capturedPiece)
+        +getFrom(): Position
+        +getTo(): Position
+        +isCapture(): boolean
+        +isCastling(): boolean
+        +isEnPassant(): boolean
+        +isPromotion(): boolean
+    }
+}
+
+package "exception" #FFE4E1 {
+    class ChessException {
+        +ChessException(message: String)
+    }
+    
+    class InvalidMoveException {
+        +InvalidMoveException(message: String)
+    }
+    
+    class GameNotInProgressException {
+        +GameNotInProgressException(message: String)
+    }
+    
+    class NotYourTurnException {
+        +NotYourTurnException(message: String)
+    }
+    
+    class InvalidPieceSelectionException {
+        +InvalidPieceSelectionException(message: String)
+    }
+}
+
+package "pieces (Strategy Pattern)" #E0F0FF {
+    abstract class Piece <<Strategy>> {
+        #color: Color
+        #type: PieceType
+        #hasMoved: boolean
+        --
+        +Piece(color: Color, type: PieceType)
+        +getColor(): Color
+        +getType(): PieceType
+        +hasMoved(): boolean
+        +setMoved(): void
+        +{abstract} getPossibleMoves(pos: Position, board: Board): List<Position>
+        +{abstract} copy(): Piece
+    }
+    
+    class King {
+        +King(color: Color)
+        +getPossibleMoves(pos, board): List<Position>
+        +copy(): Piece
+    }
+    
+    class Queen {
+        +Queen(color: Color)
+        +getPossibleMoves(pos, board): List<Position>
+        +copy(): Piece
+    }
+    
+    class Rook {
+        +Rook(color: Color)
+        +getPossibleMoves(pos, board): List<Position>
+        +copy(): Piece
+    }
+    
+    class Bishop {
+        +Bishop(color: Color)
+        +getPossibleMoves(pos, board): List<Position>
+        +copy(): Piece
+    }
+    
+    class Knight {
+        +Knight(color: Color)
+        +getPossibleMoves(pos, board): List<Position>
+        +copy(): Piece
+    }
+    
+    class Pawn {
+        +Pawn(color: Color)
+        +getPossibleMoves(pos, board): List<Position>
+        +canPromote(pos: Position): boolean
+        +copy(): Piece
+    }
+    
+    class PieceFactory <<Factory>> {
+        +{static} createPiece(type: PieceType, color: Color): Piece
+        +{static} copyPiece(piece: Piece): Piece
+    }
+}
+
+package "board" #F0FFF0 {
+    class Board {
+        -board: Piece[][]
+        -piecePositions: Map<Position, Piece>
+        -lastDoubleMovePawn: Position
+        --
+        +Board()
+        +placePiece(pos: Position, piece: Piece): void
+        +removePiece(pos: Position): void
+        +getPiece(pos: Position): Piece
+        +isOccupied(pos: Position): boolean
+        +isOccupiedBySameColor(pos: Position, color: Color): boolean
+        +movePiece(from: Position, to: Position): void
+        +findKing(color: Color): Position
+        +getAllPiecesOfColor(color: Color): List<Position>
+        +copy(): Board
+    }
+    
+    class BoardDisplay {
+        +{static} display(board: Board): void
+        +{static} displayWithHighlight(board, from, to): void
+    }
+}
+
+package "rules (Strategy Pattern)" #FFF0E0 {
+    interface ChessRules <<Strategy>> {
+        +isValidMove(move: Move, board: Board): boolean
+        +isInCheck(color: Color, board: Board): boolean
+        +isCheckmate(color: Color, board: Board): boolean
+        +isStalemate(color: Color, board: Board): boolean
+        +wouldMoveCauseCheck(move: Move, board: Board, color: Color): boolean
+    }
+    
+    class StandardChessRules {
+        -moveValidator: MoveValidator
+        -checkDetector: CheckDetector
+        --
+        +StandardChessRules()
+        +isValidMove(move, board): boolean
+        +isInCheck(color, board): boolean
+        +isCheckmate(color, board): boolean
+        +isStalemate(color, board): boolean
+        +wouldMoveCauseCheck(move, board, color): boolean
+    }
+    
+    class MoveValidator {
+        -chessRules: ChessRules
+        -specialMoveHandler: SpecialMoveHandler
+        --
+        +MoveValidator(rules: ChessRules)
+        +validate(move: Move, board: Board): boolean
+    }
+    
+    class CheckDetector {
+        +isInCheck(color: Color, board: Board): boolean
+        +isPositionUnderAttack(pos: Position, color: Color, board: Board): boolean
+    }
+    
+    class SpecialMoveHandler {
+        +validateSpecialMove(move: Move, board: Board): boolean
+        +executeCastling(move: Move, board: Board): void
+        +executeEnPassant(move: Move, board: Board): void
+    }
+}
+
+package "moves (Command Pattern)" #FFFACD {
+    interface MoveCommand <<Command>> {
+        +execute(board: Board): void
+        +undo(board: Board): void
+        +getMove(): Move
+    }
+    
+    class StandardMoveCommand {
+        -move: Move
+        -wasFirstMove: boolean
+        --
+        +StandardMoveCommand(move: Move)
+        +execute(board: Board): void
+        +undo(board: Board): void
+        +getMove(): Move
+    }
+    
+    class MoveHistory {
+        -moves: List<Move>
+        --
+        +MoveHistory()
+        +addMove(move: Move): void
+        +getLastMove(): Move
+        +getMoveAt(index: int): Move
+        +getMoveCount(): int
+        +getAllMoves(): List<Move>
+    }
+}
+
+package "user" #FFE4E1 {
+    class User {
+        -id: String
+        -name: String
+        -score: int
+        --
+        +User(id: String, name: String)
+        +getId(): String
+        +getName(): String
+        +getScore(): int
+        +incrementScore(points: int): void
+        +decrementScore(points: int): void
+        +send(message: Message): void
+        +receive(message: Message): void
+    }
+}
+
+package "chat (Mediator Pattern)" #E0FFFF {
+    interface ChatMediator <<Mediator>> {
+        +sendMessage(message: Message, sender: User): void
+        +addUser(user: User): void
+        +removeUser(user: User): void
+    }
+    
+    abstract class Colleague {
+        #mediator: ChatMediator
+        --
+        +{abstract} send(message: Message): void
+        +{abstract} receive(message: Message): void
+        +setMediator(mediator: ChatMediator): void
+    }
+    
+    class Message <<ValueObject>> {
+        -senderId: String
+        -content: String
+        -timestamp: long
+        --
+        +Message(senderId: String, content: String)
+        +getSenderId(): String
+        +getContent(): String
+        +getTimestamp(): long
+    }
+}
+
+package "matching (Strategy Pattern)" #F0E0FF {
+    interface MatchingStrategy <<Strategy>> {
+        +findMatch(user: User, waitingUsers: List<User>): User
+    }
+    
+    class ScoreBasedMatching {
+        -scoreTolerance: int
+        --
+        +ScoreBasedMatching(tolerance: int)
+        +findMatch(user, waitingUsers): User
+        +getScoreTolerance(): int
+    }
+    
+    class SimpleMatchingStrategy {
+        +findMatch(user, waitingUsers): User
+    }
+}
+
+package "game (Mediator & Observer)" #FFE0F0 {
+    interface GameEventListener <<Observer>> {
+        +onMoveMade(move: Move, matchId: String): void
+        +onCheck(color: Color, matchId: String): void
+        +onGameEnd(result: GameResult, reason: String, matchId: String): void
+        +onPlayerQuit(playerName: String, matchId: String): void
+    }
+    
+    class Match {
+        -matchId: String
+        -whitePlayer: User
+        -blackPlayer: User
+        -board: Board
+        -rules: ChessRules
+        -moveHistory: MoveHistory
+        -chatHistory: List<Message>
+        -eventListeners: List<GameEventListener>
+        -currentTurn: Color
+        -status: GameStatus
+        --
+        +Match(matchId, whitePlayer, blackPlayer)
+        +makeMove(from: Position, to: Position, player: User): void
+        +quitGame(player: User): void
+        +displayBoard(): void
+        +addEventListener(listener: GameEventListener): void
+        +sendMessage(message: Message, sender: User): void
+    }
+    
+    class GameManager <<Singleton>> {
+        -{static} instance: GameManager
+        -activeMatches: Map<String, Match>
+        -waitingUsers: List<User>
+        -matchingStrategy: MatchingStrategy
+        -matchCounter: AtomicInteger
+        --
+        -{static} getInstance(): GameManager
+        +setMatchingStrategy(strategy: MatchingStrategy): void
+        +requestMatch(user: User): Match
+        +makeMove(matchId, from, to, player): void
+        +quitMatch(matchId, player): void
+        +sendChatMessage(matchId, message, user): void
+        +getMatch(matchId): Match
+        +displayActiveMatches(): void
+    }
+}
+
+' Relationships - Inheritance
+ChessException <|-- InvalidMoveException
+ChessException <|-- GameNotInProgressException
+ChessException <|-- NotYourTurnException
+ChessException <|-- InvalidPieceSelectionException
+
+Piece <|-- King
+Piece <|-- Queen
+Piece <|-- Rook
+Piece <|-- Bishop
+Piece <|-- Knight
+Piece <|-- Pawn
+
+ChessRules <|.. StandardChessRules
+MatchingStrategy <|.. ScoreBasedMatching
+MatchingStrategy <|.. SimpleMatchingStrategy
+MoveCommand <|.. StandardMoveCommand
+Colleague <|-- User
+ChatMediator <|.. Match
+
+' Relationships - Composition/Aggregation
+Move *-- Position : from, to
+Move *-- Piece : piece
+Move *-- MoveType
+Move *-- PieceType : promotionType
+
+Board *-- "64" Position
+Board *-- "*" Piece
+
+Match *-- Board
+Match *-- "2" User : players
+Match *-- ChessRules
+Match *-- MoveHistory
+Match *-- "*" Message
+Match *-- "*" GameEventListener
+
+GameManager *-- "*" Match
+GameManager *-- "*" User : waiting
+GameManager o-- MatchingStrategy
+
+StandardChessRules *-- MoveValidator
+StandardChessRules *-- CheckDetector
+MoveValidator *-- SpecialMoveHandler
+
+MoveHistory *-- "*" Move
+StandardMoveCommand *-- Move
+
+User o-- ChatMediator
+Colleague o-- ChatMediator
+
+' Relationships - Dependencies
+PieceFactory ..> Piece : creates
+PieceFactory ..> PieceType : uses
+PieceFactory ..> Color : uses
+
+Board ..> Piece : manages
+Board ..> Position : uses
+
+Piece ..> Board : queries
+Piece ..> Position : uses
+
+ChessRules ..> Move : validates
+ChessRules ..> Board : reads
+ChessRules ..> Color : uses
+
+Match ..> Position : uses
+Match ..> GameStatus : uses
+Match ..> GameResult : uses
+Match ..> ChessException : throws
+
+GameManager ..> GameStatus : uses
+GameManager ..> Position : uses
+GameManager ..> ChessException : throws
+
+BoardDisplay ..> Board : displays
+
+' Design Pattern Annotations
+note right of GameManager
+  **Singleton Pattern**
+  Thread-safe lazy initialization
+  with double-checked locking
+end note
+
+note right of PieceFactory
+  **Factory Pattern**
+  Encapsulates piece creation
+  Returns abstract Piece type
+end note
+
+note right of Piece
+  **Strategy Pattern**
+  Each piece has different
+  movement strategy
+end note
+
+note right of ChessRules
+  **Strategy Pattern**
+  Different rule implementations
+  can be plugged in
+end note
+
+note right of MatchingStrategy
+  **Strategy Pattern**
+  Pluggable matching algorithms
+  (score-based, FIFO, etc.)
+end note
+
+note right of GameEventListener
+  **Observer Pattern**
+  Observers get notified of
+  game events
+end note
+
+note right of ChatMediator
+  **Mediator Pattern**
+  Decouples user communication
+  Match acts as mediator
+end note
+
+note right of MoveCommand
+  **Command Pattern**
+  Encapsulates move as object
+  Enables undo/redo
+end note
+
+note bottom of Position
+  **Value Object**
+  Immutable
+  Validates coordinates
+end note
+
+' SOLID Principles Notes
+note bottom of Board
+  **SRP**: Only manages piece positions
+  Display logic separated to BoardDisplay
+end note
+
+note bottom of MoveValidator
+  **SRP**: Only validates moves
+  Check detection separated
+  Special moves separated
+end note
+
+note bottom of Match
+  **DIP**: Depends on ChessRules interface
+  not concrete implementation
+  **ISP**: Implements focused ChatMediator
+end note
+
+legend right
+  |= Pattern |= Color |
+  | Singleton | <back:LightYellow>   </back> |
+  | Factory | <back:LightGreen>   </back> |
+  | Strategy | <back:LightBlue>   </back> |
+  | Observer | <back:LightPink>   </back> |
+  | Mediator | <back:LightCyan>   </back> |
+  | Command | <back:Wheat>   </back> |
+  | Value Object | <back:WhiteSmoke>   </back> |
+  
+  **SOLID Principles Applied:**
+  • SRP: Single Responsibility
+  • OCP: Open/Closed
+  • LSP: Liskov Substitution
+  • ISP: Interface Segregation
+  • DIP: Dependency Inversion
+endlegend
+
+@enduml
+

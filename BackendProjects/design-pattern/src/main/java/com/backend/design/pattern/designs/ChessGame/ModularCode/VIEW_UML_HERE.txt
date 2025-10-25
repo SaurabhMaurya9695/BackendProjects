@@ -1,0 +1,73 @@
+========================================
+   HOW TO VIEW THE UML DIAGRAM
+========================================
+
+The UML diagram is created in PlantUML format.
+To view it as an image, use one of these methods:
+
+METHOD 1: Online PlantUML Editor (EASIEST)
+-------------------------------------------
+1. Go to: http://www.plantuml.com/plantuml/uml/
+2. Open the file: ChessGame_UML.puml
+3. Copy all the content
+4. Paste it in the online editor
+5. The diagram will render automatically
+6. You can download it as PNG/SVG
+
+METHOD 2: VS Code Extension
+----------------------------
+1. Install "PlantUML" extension in VS Code
+2. Open ChessGame_UML.puml
+3. Press Alt+D (or Cmd+D on Mac)
+4. The preview will open in a new tab
+
+METHOD 3: IntelliJ IDEA Plugin
+-------------------------------
+1. Install "PlantUML integration" plugin
+2. Open ChessGame_UML.puml
+3. Right-click and select "Show PlantUML Diagram"
+
+METHOD 4: Command Line (requires Graphviz)
+-------------------------------------------
+1. Install PlantUML: brew install plantuml (Mac) or download from plantuml.com
+2. Install Graphviz: brew install graphviz (Mac)
+3. Run: plantuml ChessGame_UML.puml
+4. Opens ChessGame_UML.png in the same directory
+
+METHOD 5: PlantText (Online, Quick)
+------------------------------------
+1. Go to: https://www.planttext.com/
+2. Copy content of ChessGame_UML.puml
+3. Paste and click "Refresh"
+4. Download the generated image
+
+========================================
+   WHAT THE DIAGRAM SHOWS
+========================================
+
+✓ All 40+ classes and interfaces
+✓ Package structure (model, pieces, board, rules, game, etc.)
+✓ Design patterns with color coding:
+  - Singleton (Yellow)
+  - Factory (Green)
+  - Strategy (Blue)
+  - Observer (Pink)
+  - Mediator (Cyan)
+  - Command (Wheat)
+  - Value Objects (Gray)
+
+✓ Class relationships:
+  - Inheritance (solid line with triangle)
+  - Implementation (dashed line with triangle)
+  - Composition (filled diamond)
+  - Aggregation (empty diamond)
+  - Dependency (dashed arrow)
+
+✓ SOLID principles annotations
+✓ Method signatures for key classes
+✓ Attributes for important classes
+
+========================================
+File: ChessGame_UML.puml
+========================================
+
