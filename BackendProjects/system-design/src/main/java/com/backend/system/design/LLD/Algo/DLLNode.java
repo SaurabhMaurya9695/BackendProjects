@@ -1,4 +1,4 @@
-package com.backend.system.design.LLD.LRUCache.Algo;
+package com.backend.system.design.LLD.Algo;
 
 /**
  * Doubly Linked List Node.

@@ -1,4 +1,4 @@
-package com.backend.system.design.LLD.LRUCache.Algo;
+package com.backend.system.design.LLD.Algo;
 
 // The list only needs to be generic over the element type E.
 public class DoublyLinkedList<E> {

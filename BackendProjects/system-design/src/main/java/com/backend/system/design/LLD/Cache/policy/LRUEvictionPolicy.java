@@ -1,7 +1,7 @@
 package com.backend.system.design.LLD.Cache.policy;
 
-import com.backend.system.design.LLD.LRUCache.Algo.DLLNode;
-import com.backend.system.design.LLD.LRUCache.Algo.DoublyLinkedList;
+import com.backend.system.design.LLD.Algo.DLLNode;
+import com.backend.system.design.LLD.Algo.DoublyLinkedList;
 
 import java.util.HashMap;
 import java.util.Map;
