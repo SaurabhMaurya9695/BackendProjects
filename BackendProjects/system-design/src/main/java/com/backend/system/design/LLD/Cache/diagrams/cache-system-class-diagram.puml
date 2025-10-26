@@ -1,0 +1,287 @@
+@startuml Cache System Design - Class Diagram
+
+' ========================================
+' CACHE SYSTEM DESIGN - CLASS DIAGRAM
+' Following SOLID Principles and LLD
+' ========================================
+
+skinparam classAttributeIconSize 0
+skinparam linetype ortho
+skinparam backgroundColor #FEFEFE
+skinparam class {
+    BackgroundColor<<interface>> #E1F5FE
+    BorderColor<<interface>> #01579B
+    BackgroundColor<<exception>> #FFEBEE
+    BorderColor<<exception>> #B71C1C
+    BackgroundColor<<factory>> #FFF9C4
+    BorderColor<<factory>> #F57F17
+    BackgroundColor<<implementation>> #E8F5E9
+    BorderColor<<implementation>> #1B5E20
+}
+
+' ========================================
+' CACHE INTERFACE AND IMPLEMENTATION
+' ========================================
+
+interface Cache<Key, Value> <<interface>> {
+    + put(key: Key, value: Value): void
+    + get(key: Key): Optional<Value>
+    + remove(key: Key): Optional<Value>
+    + containsKey(key: Key): boolean
+    + size(): int
+    + capacity(): int
+    + isEmpty(): boolean
+    + isFull(): boolean
+    + clear(): void
+    + getStats(): CacheStats
+}
+
+class CacheImpl<Key, Value> <<implementation>> {
+    - storage: Storage<Key, Value>
+    - evictionPolicy: EvictionPolicy<Key>
+    - hits: long
+    - misses: long
+    - evictions: long
+    
+    + CacheImpl(storage, evictionPolicy)
+    + put(key: Key, value: Value): void
+    + get(key: Key): Optional<Value>
+    + remove(key: Key): Optional<Value>
+    + containsKey(key: Key): boolean
+    + size(): int
+    + capacity(): int
+    + isEmpty(): boolean
+    + isFull(): boolean
+    + clear(): void
+    + getStats(): CacheStats
+}
+
+class CacheStats {
+    - hits: long
+    - misses: long
+    - evictions: long
+    - currentSize: int
+    - capacity: int
+    
+    + CacheStats(hits, misses, evictions, currentSize, capacity)
+    + getHits(): long
+    + getMisses(): long
+    + getEvictions(): long
+    + getTotalRequests(): long
+    + getHitRate(): double
+    + getMissRate(): double
+    + getCurrentSize(): int
+    + getCapacity(): int
+    + getUtilization(): double
+    + toString(): String
+}
+
+' ========================================
+' STORAGE ABSTRACTION
+' ========================================
+
+interface Storage<Key, Value> <<interface>> {
+    + put(key: Key, value: Value): void
+    + get(key: Key): Optional<Value>
+    + remove(key: Key): Optional<Value>
+    + containsKey(key: Key): boolean
+    + size(): int
+    + capacity(): int
+    + isFull(): boolean
+    + clear(): void
+}
+
+class HashMapStorage<Key, Value> <<implementation>> {
+    - storage: Map<Key, Value>
+    - capacity: int
+    
+    + HashMapStorage(capacity: int)
+    + put(key: Key, value: Value): void
+    + get(key: Key): Optional<Value>
+    + remove(key: Key): Optional<Value>
+    + containsKey(key: Key): boolean
+    + size(): int
+    + capacity(): int
+    + isFull(): boolean
+    + clear(): void
+}
+
+' ========================================
+' EVICTION POLICY ABSTRACTION
+' ========================================
+
+interface EvictionPolicy<Key> <<interface>> {
+    + keyAccessed(key: Key): void
+    + keyAdded(key: Key): void
+    + keyRemoved(key: Key): void
+    + evictKey(): Key
+    + getPolicyName(): String
+}
+
+class LRUEvictionPolicy<Key> <<implementation>> {
+    - dll: DoublyLinkedList<Key>
+    - keyNodeMap: Map<Key, DLLNode<Key>>
+    
+    + LRUEvictionPolicy(capacity: int)
+    + keyAccessed(key: Key): void
+    + keyAdded(key: Key): void
+    + keyRemoved(key: Key): void
+    + evictKey(): Key
+    + getPolicyName(): String
+}
+
+class FIFOEvictionPolicy<Key> <<implementation>> {
+    - queue: Queue<Key>
+    
+    + FIFOEvictionPolicy(capacity: int)
+    + keyAccessed(key: Key): void
+    + keyAdded(key: Key): void
+    + keyRemoved(key: Key): void
+    + evictKey(): Key
+    + getPolicyName(): String
+}
+
+class LFUEvictionPolicy<Key> <<implementation>> {
+    - keyFrequency: Map<Key, Integer>
+    - frequencyKeys: Map<Integer, LinkedHashSet<Key>>
+    - minFrequency: int
+    
+    + LFUEvictionPolicy(capacity: int)
+    + keyAccessed(key: Key): void
+    + keyAdded(key: Key): void
+    + keyRemoved(key: Key): void
+    + evictKey(): Key
+    + getPolicyName(): String
+}
+
+' ========================================
+' DATA STRUCTURES (for LRU)
+' ========================================
+
+class DoublyLinkedList<E> {
+    - head: DLLNode<E>
+    - tail: DLLNode<E>
+    - capacity: int
+    - currentSize: int
+    
+    + DoublyLinkedList(capacity: int)
+    + addNodeToFront(node: DLLNode<E>): void
+    + removeNode(node: DLLNode<E>): void
+    + getLRUNode(): DLLNode<E>
+    + getCurrentSize(): int
+    + getCapacity(): int
+}
+
+class DLLNode<E> {
+    ~ next: DLLNode<E>
+    ~ prev: DLLNode<E>
+    ~ element: E
+    
+    + DLLNode(element: E)
+    + getElement(): E
+    + setElement(element: E): void
+}
+
+' ========================================
+' FACTORY PATTERN
+' ========================================
+
+class CacheFactory <<factory>> {
+    + {static} createCache(capacity, policyType): Cache<K, V>
+    + {static} createLRUCache(capacity): Cache<K, V>
+    + {static} createFIFOCache(capacity): Cache<K, V>
+    + {static} createLFUCache(capacity): Cache<K, V>
+    + {static} createCache(storage, evictionPolicy): Cache<K, V>
+    - {static} createEvictionPolicy(capacity, policyType): EvictionPolicy<K>
+}
+
+enum EvictionPolicyType {
+    LRU
+    FIFO
+    LFU
+}
+
+' ========================================
+' EXCEPTIONS
+' ========================================
+
+class CacheException <<exception>> {
+    + CacheException(message: String)
+    + CacheException(message: String, cause: Throwable)
+}
+
+class KeyNotFoundException <<exception>> {
+    + KeyNotFoundException(key: String)
+}
+
+class InvalidCapacityException <<exception>> {
+    + InvalidCapacityException(capacity: int)
+}
+
+class RuntimeException {
+}
+
+' ========================================
+' RELATIONSHIPS
+' ========================================
+
+' Cache Implementation
+Cache <|.. CacheImpl : implements
+CacheImpl --> Storage : uses
+CacheImpl --> EvictionPolicy : uses
+CacheImpl ..> CacheStats : creates
+
+' Storage Implementation
+Storage <|.. HashMapStorage : implements
+
+' Eviction Policy Implementations
+EvictionPolicy <|.. LRUEvictionPolicy : implements
+EvictionPolicy <|.. FIFOEvictionPolicy : implements
+EvictionPolicy <|.. LFUEvictionPolicy : implements
+
+' LRU uses DoublyLinkedList
+LRUEvictionPolicy --> DoublyLinkedList : uses
+LRUEvictionPolicy --> DLLNode : uses
+DoublyLinkedList --> DLLNode : contains
+
+' Factory Pattern
+CacheFactory ..> Cache : creates
+CacheFactory ..> CacheImpl : creates
+CacheFactory ..> Storage : creates
+CacheFactory ..> EvictionPolicy : creates
+CacheFactory --> EvictionPolicyType : uses
+
+' Exception Hierarchy
+RuntimeException <|-- CacheException
+CacheException <|-- KeyNotFoundException
+CacheException <|-- InvalidCapacityException
+
+' Notes
+note top of CacheImpl
+    **SOLID Principles Applied:**
+    - Single Responsibility: Only coordinates
+    - Dependency Inversion: Depends on abstractions
+    - Open/Closed: Open for extension
+end note
+
+note top of EvictionPolicy
+    **Strategy Pattern:**
+    Different algorithms for eviction
+    can be swapped at runtime
+end note
+
+note top of CacheFactory
+    **Factory Pattern:**
+    Encapsulates cache creation logic
+    Simplifies object construction
+end note
+
+note bottom of Storage
+    **Dependency Inversion:**
+    High-level cache depends on
+    this abstraction, not concrete
+    implementations
+end note
+
+@enduml
+
