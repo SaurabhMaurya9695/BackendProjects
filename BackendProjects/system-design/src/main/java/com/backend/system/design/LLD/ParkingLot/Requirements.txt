@@ -1,0 +1,9 @@
+1: A parking lot has multiple slots available for vehicles
+2: Different VehicleType(Bike,Car,Truck) occupy different slot sizes
+3: Each Vehicle gets a parking ticket upon entry
+4: The System calculate the price based on the Vehicle type and duration of stay.
+5: A vehicle must complete their payment before exiting.
+6: Multiple Payment Methods are supported (CreditCard, Cash, UPI)
+7: Once the payment is paid by Vehicle, Vehicle can exist and the slot is free for another Vehicle
+8: Vehicle can't park on the occupied space.
+9: Vehicle can't be Vacant Without Payment

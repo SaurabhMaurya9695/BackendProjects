@@ -1,0 +1,500 @@
+@startuml ParkingLotSystem_CursorWay
+
+!define LIGHTBLUE #E8F4F8
+!define LIGHTGREEN #E8F8E8
+!define LIGHTYELLOW #FFF8DC
+!define LIGHTPINK #FFE8E8
+!define LIGHTCYAN #E0FFFF
+
+title **Parking Lot System - CursorWay Implementation**\n\
+Design Patterns: Strategy, Singleton, Facade, Template Method\n\
+SOLID Principles: SRP, OCP, LSP, ISP, DIP\n\
+══════════════════════════════════════════════════
+
+skinparam backgroundColor white
+skinparam classAttributeIconSize 0
+skinparam classFontStyle bold
+skinparam packageStyle rectangle
+
+skinparam class {
+    BackgroundColor<<Enum>> LIGHTYELLOW
+    BorderColor<<Enum>> #DAA520
+    BackgroundColor<<Interface>> LIGHTBLUE
+    BorderColor<<Interface>> #4169E1
+    BackgroundColor<<Abstract>> LIGHTGREEN
+    BorderColor<<Abstract>> #228B22
+    BackgroundColor<<Singleton>> LIGHTPINK
+    BorderColor<<Singleton>> #DC143C
+    BackgroundColor<<Facade>> LIGHTCYAN
+    BorderColor<<Facade>> #008B8B
+    BackgroundColor White
+    BorderColor Black
+    ArrowColor #333333
+    FontSize 11
+}
+
+' ==========================================
+' LAYER 1: ENUMS (Foundation)
+' ==========================================
+
+package "📋 Enums Layer" <<Rectangle>> #FFFACD {
+    
+    enum VehicleType <<Enum>> {
+        🏍️ BIKE
+        🚗 CAR
+        🚚 TRUCK
+        __
+        +getDisplayName(): String
+    }
+    
+    enum SpotSize <<Enum>> {
+        SMALL(1)
+        MEDIUM(2)
+        LARGE(4)
+        __
+        -sizeUnits: int
+        -description: String
+        __
+        +getSizeUnits(): int
+        +getDescription(): String
+    }
+    
+    enum SpotStatus <<Enum>> {
+        ✅ AVAILABLE
+        ❌ OCCUPIED
+        🔒 RESERVED
+        ⚠️ OUT_OF_SERVICE
+        __
+        +getDisplayName(): String
+    }
+    
+    enum PaymentStatus <<Enum>> {
+        ⏳ PENDING
+        ✅ COMPLETED
+        ❌ FAILED
+        💰 REFUNDED
+        __
+        +getDisplayName(): String
+    }
+    
+    enum PaymentMethod <<Enum>> {
+        💵 CASH
+        💳 CREDIT_CARD
+        📱 UPI
+        __
+        +getDisplayName(): String
+    }
+}
+
+' ==========================================
+' LAYER 2: DOMAIN MODELS
+' ==========================================
+
+package "🚗 Vehicle Domain" <<Rectangle>> #E8F8E8 {
+    
+    abstract class Vehicle <<Abstract>> {
+        -registrationNumber: String
+        -ownerName: String
+        -vehicleType: VehicleType
+        __
+        #Vehicle(registrationNumber, ownerName, vehicleType)
+        +getRegistrationNumber(): String
+        +getOwnerName(): String
+        +getVehicleType(): VehicleType
+        +**{abstract}** getRequiredSpotSize(): SpotSize
+        +equals(Object): boolean
+        +hashCode(): int
+        +toString(): String
+    }
+    
+    class Bike {
+        +Bike(registrationNumber, ownerName)
+        +getRequiredSpotSize(): SpotSize
+    }
+    
+    class Car {
+        +Car(registrationNumber, ownerName)
+        +getRequiredSpotSize(): SpotSize
+    }
+    
+    class Truck {
+        +Truck(registrationNumber, ownerName)
+        +getRequiredSpotSize(): SpotSize
+    }
+}
+
+package "🅿️ Parking Domain" <<Rectangle>> #FFE8E8 {
+    
+    class ParkingSpot {
+        -spotId: String
+        -spotSize: SpotSize
+        -floor: int
+        -status: SpotStatus
+        -parkedVehicle: Vehicle
+        __
+        +ParkingSpot(spotId, spotSize, floor)
+        __
+        +canAccommodate(vehicle: Vehicle): boolean
+        +parkVehicle(vehicle: Vehicle): boolean
+        +removeVehicle(): Vehicle
+        __
+        +getSpotId(): String
+        +getSpotSize(): SpotSize
+        +getFloor(): int
+        +getStatus(): SpotStatus
+        +getParkedVehicle(): Vehicle
+        +isAvailable(): boolean
+    }
+    
+    class ParkingTicket {
+        -ticketId: String
+        -vehicle: Vehicle
+        -parkingSpot: ParkingSpot
+        -entryTime: LocalDateTime
+        -exitTime: LocalDateTime
+        -paymentStatus: PaymentStatus
+        -amountPaid: double
+        __
+        +ParkingTicket(vehicle, parkingSpot)
+        -generateTicketId(): String
+        __
+        +markExit(): void
+        +completePayment(amount): void
+        +isPaymentCompleted(): boolean
+        __
+        +getParkingDurationInMinutes(): long
+        +getParkingDurationInHours(): long
+        +getTicketId(): String
+        +getVehicle(): Vehicle
+        +getParkingSpot(): ParkingSpot
+    }
+}
+
+' ==========================================
+' LAYER 3: STRATEGY PATTERNS
+' ==========================================
+
+package "💰 Pricing Strategy" <<Rectangle>> #E0F0FF {
+    
+    interface PricingStrategy <<Interface>> {
+        +calculateFee(ticket: ParkingTicket): double
+        +getStrategyName(): String
+    }
+    
+    class HourlyPricingStrategy {
+        -hourlyRates: Map<VehicleType, Double>
+        -baseRate: double
+        __
+        +HourlyPricingStrategy()
+        +HourlyPricingStrategy(baseRate)
+        __
+        +calculateFee(ticket): double
+        +getStrategyName(): String
+        +updateRate(vehicleType, newRate): void
+        +getRate(vehicleType): double
+    }
+    
+    class FlatRatePricingStrategy {
+        -flatRates: Map<VehicleType, Double>
+        __
+        +FlatRatePricingStrategy()
+        __
+        +calculateFee(ticket): double
+        +getStrategyName(): String
+        +updateRate(vehicleType, newRate): void
+    }
+}
+
+package "💳 Payment Strategy" <<Rectangle>> #FFE0F0 {
+    
+    interface PaymentStrategy <<Interface>> {
+        +processPayment(amount, ticketId): boolean
+        +getPaymentMethodName(): String
+        +validatePaymentDetails(): boolean
+    }
+    
+    class CashPayment {
+        -cashReceived: double
+        -changeToReturn: double
+        __
+        +CashPayment(cashReceived)
+        __
+        +processPayment(amount, ticketId): boolean
+        +getPaymentMethodName(): String
+        +validatePaymentDetails(): boolean
+        +getChangeToReturn(): double
+    }
+    
+    class CreditCardPayment {
+        -cardNumber: String
+        -cardHolderName: String
+        -expiryDate: String
+        -cvv: String
+        __
+        +CreditCardPayment(cardNumber, ...)
+        __
+        +processPayment(amount, ticketId): boolean
+        +getPaymentMethodName(): String
+        +validatePaymentDetails(): boolean
+    }
+    
+    class UPIPayment {
+        -upiId: String
+        -transactionId: String
+        __
+        +UPIPayment(upiId)
+        __
+        +processPayment(amount, ticketId): boolean
+        +getPaymentMethodName(): String
+        +validatePaymentDetails(): boolean
+        +getTransactionId(): String
+    }
+}
+
+' ==========================================
+' LAYER 4: MANAGERS (Business Logic)
+' ==========================================
+
+package "🔧 Manager Layer" <<Rectangle>> #F0F8FF {
+    
+    class ParkingSpotManager {
+        -allSpots: Map<String, ParkingSpot>
+        -spotsBySize: Map<SpotSize, List<ParkingSpot>>
+        __
+        +ParkingSpotManager()
+        __
+        +addParkingSpot(spot): void
+        +findAvailableSpot(vehicle): Optional<ParkingSpot>
+        +getSpotById(spotId): Optional<ParkingSpot>
+        __
+        +getTotalSpots(): int
+        +getAvailableSpots(): int
+        +getAvailableSpotsBySize(size): int
+        +getStatusSummary(): String
+        +displayAllSpots(): void
+    }
+    
+    class TicketManager {
+        -ticketsByTicketId: Map<String, ParkingTicket>
+        -ticketsByVehicleRegistration: Map<String, ParkingTicket>
+        -completedTicketIds: Set<String>
+        __
+        +TicketManager()
+        __
+        +issueTicket(ticket): ParkingTicket
+        +getTicketById(ticketId): Optional<ParkingTicket>
+        +getActiveTicketByVehicle(regNo): Optional<ParkingTicket>
+        +completeTicket(ticketId): void
+        __
+        +getActiveTicketsCount(): int
+        +getCompletedTicketsCount(): int
+        +hasActiveTicket(regNo): boolean
+        +displayActiveTickets(): void
+    }
+    
+    class PaymentManager {
+        -pricingStrategy: PricingStrategy
+        __
+        +PaymentManager(pricingStrategy)
+        __
+        +calculateFee(ticket): double
+        +processPayment(ticket, paymentStrategy): boolean
+        +canProcessPayment(ticket): boolean
+        +displayFeeDetails(ticket): void
+        +getPricingStrategy(): PricingStrategy
+    }
+}
+
+' ==========================================
+' LAYER 5: FACADE (Main System)
+' ==========================================
+
+package "🎯 System Facade" <<Rectangle>> #E0FFFF {
+    
+    class ParkingLotSystem <<Singleton>> <<Facade>> {
+        -{static} instance: ParkingLotSystem
+        -parkingLotName: String
+        -spotManager: ParkingSpotManager
+        -ticketManager: TicketManager
+        -paymentManager: PaymentManager
+        __
+        -ParkingLotSystem(name, pricingStrategy)
+        +**{static}** getInstance(name, pricingStrategy): ParkingLotSystem
+        __
+        **// Setup**
+        +initializeParkingSpots(small, medium, large, floors): void
+        __
+        **// Core Operations**
+        +parkVehicle(vehicle): Optional<ParkingTicket>
+        +unparkVehicle(ticketId, paymentStrategy): boolean
+        __
+        **// Payment Operations**
+        +getParkingFee(ticketId): double
+        +processPayment(ticketId, paymentStrategy): boolean
+        +displayFeeDetails(ticketId): void
+        __
+        **// Query Operations**
+        +displayStatus(): void
+        +displayActiveTickets(): void
+        +hasAvailableSpots(): boolean
+        +getTicketByVehicle(regNo): Optional<ParkingTicket>
+    }
+}
+
+' ==========================================
+' RELATIONSHIPS
+' ==========================================
+
+' Vehicle Hierarchy (Inheritance)
+Vehicle <|-- Bike : extends
+Vehicle <|-- Car : extends
+Vehicle <|-- Truck : extends
+
+' Vehicle Associations
+Vehicle --> VehicleType : has
+Vehicle ..> SpotSize : requires
+
+' ParkingSpot Associations
+ParkingSpot --> SpotSize : has
+ParkingSpot --> SpotStatus : has
+ParkingSpot --> Vehicle : parks >
+
+' ParkingTicket Associations
+ParkingTicket --> Vehicle : for >
+ParkingTicket --> ParkingSpot : assigns >
+ParkingTicket --> PaymentStatus : tracks
+
+' Strategy Pattern - Pricing
+PricingStrategy <|.. HourlyPricingStrategy : implements
+PricingStrategy <|.. FlatRatePricingStrategy : implements
+HourlyPricingStrategy ..> VehicleType : uses
+FlatRatePricingStrategy ..> VehicleType : uses
+PricingStrategy ..> ParkingTicket : calculates for
+
+' Strategy Pattern - Payment
+PaymentStrategy <|.. CashPayment : implements
+PaymentStrategy <|.. CreditCardPayment : implements
+PaymentStrategy <|.. UPIPayment : implements
+
+' Manager Layer Relationships
+ParkingSpotManager "1" o-- "*" ParkingSpot : manages
+TicketManager "1" o-- "*" ParkingTicket : manages
+PaymentManager --> PricingStrategy : uses
+PaymentManager ..> PaymentStrategy : processes
+PaymentManager ..> ParkingTicket : calculates for
+
+' Facade Pattern
+ParkingLotSystem *-- "1" ParkingSpotManager : contains
+ParkingLotSystem *-- "1" TicketManager : contains
+ParkingLotSystem *-- "1" PaymentManager : contains
+ParkingLotSystem ..> Vehicle : manages
+ParkingLotSystem ..> ParkingTicket : creates
+ParkingLotSystem ..> PaymentStrategy : accepts
+
+' ==========================================
+' NOTES & ANNOTATIONS
+' ==========================================
+
+note top of ParkingLotSystem
+  **🎯 Facade Pattern**
+  • Simplifies complex subsystem
+  • Single entry point for clients
+  
+  **🔒 Singleton Pattern**
+  • Only one parking lot instance
+  • Global access point
+  
+  **✅ Requirement Fulfillment**
+  All 9 requirements implemented
+end note
+
+note top of Vehicle
+  **📐 Template Method Pattern**
+  • Abstract class defines structure
+  • Subclasses implement getRequiredSpotSize()
+  
+  **✅ Open/Closed Principle**
+  • Open for extension (new vehicle types)
+  • Closed for modification
+end note
+
+note right of PricingStrategy
+  **💡 Strategy Pattern**
+  • Interchangeable pricing algorithms
+  • Runtime selection
+  • Easy to extend
+  
+  **✅ Used Strategies:**
+  • Hourly (time-based)
+  • Flat Rate (fixed price)
+end note
+
+note right of PaymentStrategy
+  **💳 Strategy Pattern**
+  • Multiple payment methods
+  • Extensible for new methods
+  
+  **✅ Implementations:**
+  • Cash (with change)
+  • Credit Card (validation)
+  • UPI (transaction tracking)
+end note
+
+note bottom of ParkingSpotManager
+  **🔐 Thread-Safe**
+  Uses ConcurrentHashMap
+  
+  **✅ Single Responsibility**
+  Only manages parking spots
+end note
+
+note bottom of TicketManager
+  **✅ Single Responsibility**
+  Only manages ticket lifecycle
+  
+  Tracks active & completed tickets
+end note
+
+note bottom of PaymentManager
+  **✅ Dependency Inversion**
+  Depends on PricingStrategy abstraction
+  
+  Not on concrete implementations
+end note
+
+' ==========================================
+' LEGEND
+' ==========================================
+
+legend top left
+  **🎨 Color Coding**
+  |= Color |= Type |
+  | <back:LIGHTYELLOW>Yellow</back> | Enums |
+  | <back:LIGHTBLUE>Blue</back> | Interfaces |
+  | <back:LIGHTGREEN>Green</back> | Abstract Classes |
+  | <back:LIGHTPINK>Pink</back> | Singleton |
+  | <back:LIGHTCYAN>Cyan</back> | Facade |
+  
+  **📐 Design Patterns**
+  • Strategy (Pricing & Payment)
+  • Singleton (ParkingLotSystem)
+  • Facade (ParkingLotSystem)
+  • Template Method (Vehicle)
+  
+  **✅ SOLID Principles**
+  • **S**ingle Responsibility
+  • **O**pen/Closed
+  • **L**iskov Substitution
+  • **I**nterface Segregation
+  • **D**ependency Inversion
+  
+  **📦 Package Structure**
+  CursorWay/
+  ├── enums/
+  ├── models/
+  ├── strategy/ (pricing & payment)
+  ├── managers/
+  └── ParkingLotSystem
+end legend
+
+@enduml
