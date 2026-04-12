@@ -19,6 +19,16 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
 
     @Override
     public String chat(String query) {
+        /*
+         * TO GET THE META DETA, USE THIS
+         * var resp =  chatClient.prompt(query).call().chatResponse().getMetadata();
+         * System.out.println(resp);
+         * return "OKAY";
+         * */
+
+        /*
+         * There is one method by which you can get your response in Entity way
+         * */
         return chatClient.prompt(query).call().content();
     }
 
