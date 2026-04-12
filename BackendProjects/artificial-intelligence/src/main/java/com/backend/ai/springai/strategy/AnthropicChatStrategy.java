@@ -2,7 +2,11 @@ package com.backend.ai.springai.strategy;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.prompt.Prompt;
+import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Component;
+
+import java.util.Map;
 
 /**
  * Strategy implementation for Anthropic Claude.
@@ -29,7 +33,34 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
         /*
          * There is one method by which you can get your response in Entity way
          * */
-        return chatClient.prompt(query).call().content();
+
+        /* WITHOUT QUERY PARAM
+        Prompt prompt = new Prompt(query);
+        return chatClient
+                .prompt(prompt)
+                .call()
+                .content();
+         */
+
+        /*
+         * WITH QUERY PARAM
+         *
+        String queryStr =
+                "AS an expert in coding and programming. Always write a program in java. now reply for this question "
+                        + ": {query}";
+        return chatClient
+                .prompt()
+                .user(u -> u.text(queryStr).param("query",query))
+                .call()
+                .content();
+         */
+
+        // USING Prompt Template
+        PromptTemplate promptTemplate = PromptTemplate.builder().template(
+                "What is {techName} ? tell me with an {exampleName}").build();
+        String renderMsg = promptTemplate.render(Map.of("techName", "SPRING", "exampleName", "SPRING BOOT"));
+        Prompt prompt = new Prompt(renderMsg);
+        return this.chatClient.prompt(prompt).call().content();
     }
 
     @Override
