@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 public class ArtificialIntelligenceController {
 
-    private ChatClient _chatClient;
+    private final ChatClient _chatClient;
 
     ArtificialIntelligenceController(ChatClient.Builder builder) {
         this._chatClient = builder.build();

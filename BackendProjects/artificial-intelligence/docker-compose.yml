@@ -1,0 +1,36 @@
+services:
+  ollama:
+    image: ollama/ollama:latest
+    container_name: ollama
+    ports:
+      - "11434:11434"
+    volumes:
+      - ollama_data:/root/.ollama
+      - ~/Downloads/zscaler_bundle.pem:/zscaler_bundle.pem
+    environment:
+      - SSL_CERT_FILE=/zscaler_bundle.pem
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "ollama", "list" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 20s
+
+  ollama-model-pull:
+    image: ollama/ollama:latest
+    container_name: ollama-model-pull
+    depends_on:
+      ollama:
+        condition: service_healthy
+    volumes:
+      - ollama_data:/root/.ollama
+    entrypoint: >
+      sh -c "ollama pull deepseek-coder:1.3b"
+    environment:
+      - OLLAMA_HOST=http://ollama:11434
+    restart: no
+
+volumes:
+  ollama_data:
+    name: ollama_data
