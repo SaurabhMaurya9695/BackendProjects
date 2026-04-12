@@ -19,6 +19,7 @@
         <module>entry-point</module>
         <module>dsa</module>
         <module>xjc-plugin</module>
+        <module>artificial-intelligence</module>
     </modules>
 
     <!-- Dependencies -->
