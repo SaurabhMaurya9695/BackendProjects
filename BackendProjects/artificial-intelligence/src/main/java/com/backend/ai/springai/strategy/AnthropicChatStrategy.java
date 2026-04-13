@@ -1,5 +1,7 @@
 package com.backend.ai.springai.strategy;
 
+import com.backend.ai.springai.advisor.TokenConsumedAdvisor;
+
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
@@ -67,8 +69,9 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
         return this.chatClient
                 .prompt(prompt)
                 .advisors(
+                        new TokenConsumedAdvisor(), // custom advisor
                         new SimpleLoggerAdvisor(), // It will prints you req and repose
-                        new SafeGuardAdvisor(new ArrayList<>(Collections.singleton("SPRING")))) // whatever the word inside this list will not be allowed by user
+                        new SafeGuardAdvisor(new ArrayList<>(Collections.singleton("JAVA")))) // whatever the word inside this list will not be allowed by user
                 .call()
                 .content();
     }
