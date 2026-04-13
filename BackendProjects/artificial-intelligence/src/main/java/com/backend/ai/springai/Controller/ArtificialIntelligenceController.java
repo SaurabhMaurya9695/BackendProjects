@@ -18,18 +18,21 @@ public class ArtificialIntelligenceController {
     }
 
     /**
-     * @param query the prompt to send to the model
-     * @param model optional — "claude" or "ollama" (defaults to "ollama" if not provided)
+     * @param query          the prompt to send to the model
+     * @param model          optional — "claude" or "ollama" (defaults to "ollama")
+     * @param conversationId pass the same ID across requests to maintain chat memory
      */
     @GetMapping("/chat")
     public String chat(@RequestParam("query") String query,
-            @RequestParam(value = "model", defaultValue = "ollama") String model) {
-        return chatService.chat(query, model);
+            @RequestParam(value = "model", defaultValue = "ollama") String model,
+            @RequestParam(value = "conversationId", defaultValue = "defalt") String conversationId) {
+        return chatService.chat(query, model, conversationId);
     }
 
     @GetMapping("/stream-chat")
     public ResponseEntity<Flux<String>> streamChat(@RequestParam("query") String query,
-            @RequestParam(value = "model", defaultValue = "ollama") String model) {
-        return ResponseEntity.ok(chatService.streamChat(query, model));
+            @RequestParam(value = "model", defaultValue = "ollama") String model,
+            @RequestParam(value = "conversationId", defaultValue = "default") String conversationId) {
+        return ResponseEntity.ok(chatService.streamChat(query, model, conversationId));
     }
 }

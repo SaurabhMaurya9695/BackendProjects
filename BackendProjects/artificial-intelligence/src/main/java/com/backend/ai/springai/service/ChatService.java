@@ -18,11 +18,11 @@ public class ChatService {
         this.chatModelFactory = chatModelFactory;
     }
 
-    public String chat(String query, String model) {
-        return chatModelFactory.getStrategy(model).chat(query);
+    public String chat(String query, String model, String conversationId) {
+        return chatModelFactory.getStrategy(model).chat(query, conversationId);
     }
 
-    public Flux<String> streamChat(String query, String model) {
-        return chatModelFactory.getStrategy(model).streamChat(query);
+    public Flux<String> streamChat(String query, String model, String conversationId) {
+        return chatModelFactory.getStrategy(model).streamChat(query, conversationId);
     }
 }

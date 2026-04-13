@@ -8,9 +8,9 @@ import reactor.core.publisher.Flux;
  */
 public interface ChatModelStrategy {
 
-    String chat(String query);
+    String chat(String query, String conversationId);
 
     String getModelName();
 
-    Flux<String> streamChat(String query);
+    Flux<String> streamChat(String query, String conversationId);
 }

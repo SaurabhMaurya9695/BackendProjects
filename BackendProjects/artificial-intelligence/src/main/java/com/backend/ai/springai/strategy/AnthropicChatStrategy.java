@@ -2,6 +2,10 @@ package com.backend.ai.springai.strategy;
 
 import reactor.core.publisher.Flux;
 import com.backend.ai.springai.advisor.TokenConsumedAdvisor;
+
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
@@ -25,6 +29,7 @@ import java.util.Map;
 public class AnthropicChatStrategy implements ChatModelStrategy {
 
     private final ChatClient chatClient;
+    private final MessageChatMemoryAdvisor memoryAdvisor;
 
     @Value("classpath:prompt/system-message.st")
     private Resource _system_message;
@@ -32,13 +37,14 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
     @Value("classpath:prompt/user-message.st")
     private Resource _user_message;
 
-
     public AnthropicChatStrategy(AnthropicChatModel anthropicChatModel) {
         this.chatClient = ChatClient.builder(anthropicChatModel).build();
+        this.memoryAdvisor = MessageChatMemoryAdvisor.builder(
+                MessageWindowChatMemory.builder().build()).build();
     }
 
     @Override
-    public String chat(String query) {
+    public String chat(String query, String conversationId) {
         /*
          * TO GET THE META DETA, USE THIS
          * var resp =  chatClient.prompt(query).call().chatResponse().getMetadata();
@@ -71,17 +77,21 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
                 .content();
          */
 
-        // USING Prompt Template
-        PromptTemplate promptTemplate = PromptTemplate.builder().template(
-                "What is {techName} ? tell me with an {exampleName}").build();
-        String renderMsg = promptTemplate.render(Map.of("techName", "SPRING", "exampleName", "SPRING BOOT"));
-        Prompt prompt = new Prompt(renderMsg);
+        /*
+            // USING Prompt Template
+            PromptTemplate promptTemplate = PromptTemplate.builder().template(
+                    "What is {techName} ? tell me with an {exampleName}").build();
+            String renderMsg = promptTemplate.render(Map.of("techName", "SPRING", "exampleName", "SPRING BOOT"));
+            Prompt prompt = new Prompt(renderMsg);
+         */
         return this.chatClient
-                .prompt(prompt)
+                .prompt(query)
                 .advisors(
+                        memoryAdvisor,
                         new TokenConsumedAdvisor(), // custom advisor
                         new SimpleLoggerAdvisor(), // It will prints you req and repose
                         new SafeGuardAdvisor(new ArrayList<>(Collections.singleton("JAVA")))) // whatever the word inside this list will not be allowed by user
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .call()
                 .content();
     }
@@ -92,11 +102,13 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
     }
 
     @Override
-    public Flux<String> streamChat(String query) {
+    public Flux<String> streamChat(String query, String conversationId) {
         return this.chatClient
                 .prompt()
-                .system(system-> system.text(this._system_message))
-                .user(user-> user.text(this._user_message).param("concepts",query))
+                .system(system -> system.text(this._system_message))
+                .user(user -> user.text(this._user_message).param("concepts", query))
+                .advisors(memoryAdvisor)
+                .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .stream()
                 .content();
 
