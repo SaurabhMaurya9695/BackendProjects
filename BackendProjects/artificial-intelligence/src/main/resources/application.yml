@@ -21,3 +21,6 @@ spring:
         enabled: false
 server:
   port: 2026
+logging:
+  level:
+    .org.springframework.ai.chat.client.advisor: DEBUG

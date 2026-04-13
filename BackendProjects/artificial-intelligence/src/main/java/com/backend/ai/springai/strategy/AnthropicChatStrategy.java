@@ -2,10 +2,14 @@ package com.backend.ai.springai.strategy;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
+import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
 import org.springframework.stereotype.Component;
 
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Map;
 
 /**
@@ -60,7 +64,13 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
                 "What is {techName} ? tell me with an {exampleName}").build();
         String renderMsg = promptTemplate.render(Map.of("techName", "SPRING", "exampleName", "SPRING BOOT"));
         Prompt prompt = new Prompt(renderMsg);
-        return this.chatClient.prompt(prompt).call().content();
+        return this.chatClient
+                .prompt(prompt)
+                .advisors(
+                        new SimpleLoggerAdvisor(), // It will prints you req and repose
+                        new SafeGuardAdvisor(new ArrayList<>(Collections.singleton("SPRING")))) // whatever the word inside this list will not be allowed by user
+                .call()
+                .content();
     }
 
     @Override
