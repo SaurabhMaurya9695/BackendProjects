@@ -1,7 +1,9 @@
 package com.backend.ai.springai.Controller;
 
+import reactor.core.publisher.Flux;
 import com.backend.ai.springai.service.ChatService;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,5 +25,11 @@ public class ArtificialIntelligenceController {
     public String chat(@RequestParam("query") String query,
             @RequestParam(value = "model", defaultValue = "ollama") String model) {
         return chatService.chat(query, model);
+    }
+
+    @GetMapping("/stream-chat")
+    public ResponseEntity<Flux<String>> streamChat(@RequestParam("query") String query,
+            @RequestParam(value = "model", defaultValue = "ollama") String model) {
+        return ResponseEntity.ok(chatService.streamChat(query, model));
     }
 }

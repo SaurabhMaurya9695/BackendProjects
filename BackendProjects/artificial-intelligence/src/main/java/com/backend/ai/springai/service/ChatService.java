@@ -1,5 +1,6 @@
 package com.backend.ai.springai.service;
 
+import reactor.core.publisher.Flux;
 import com.backend.ai.springai.factory.ChatModelFactory;
 
 import org.springframework.stereotype.Service;
@@ -19,5 +20,9 @@ public class ChatService {
 
     public String chat(String query, String model) {
         return chatModelFactory.getStrategy(model).chat(query);
+    }
+
+    public Flux<String> streamChat(String query, String model) {
+        return chatModelFactory.getStrategy(model).streamChat(query);
     }
 }

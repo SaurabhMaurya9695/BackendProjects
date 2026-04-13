@@ -1,6 +1,8 @@
 package com.backend.ai.springai.strategy;
 
+import reactor.core.publisher.Flux;
 import com.backend.ai.springai.advisor.TokenConsumedAdvisor;
+import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
 import org.springframework.ai.chat.client.ChatClient;
@@ -8,6 +10,7 @@ import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
 import org.springframework.ai.chat.prompt.Prompt;
 import org.springframework.ai.chat.prompt.PromptTemplate;
+import org.springframework.core.io.Resource;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -22,6 +25,13 @@ import java.util.Map;
 public class AnthropicChatStrategy implements ChatModelStrategy {
 
     private final ChatClient chatClient;
+
+    @Value("classpath:prompt/system-message.st")
+    private Resource _system_message;
+
+    @Value("classpath:prompt/user-message.st")
+    private Resource _user_message;
+
 
     public AnthropicChatStrategy(AnthropicChatModel anthropicChatModel) {
         this.chatClient = ChatClient.builder(anthropicChatModel).build();
@@ -79,5 +89,16 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
     @Override
     public String getModelName() {
         return "claude";
+    }
+
+    @Override
+    public Flux<String> streamChat(String query) {
+        return this.chatClient
+                .prompt()
+                .system(system-> system.text(this._system_message))
+                .user(user-> user.text(this._user_message).param("concepts",query))
+                .stream()
+                .content();
+
     }
 }

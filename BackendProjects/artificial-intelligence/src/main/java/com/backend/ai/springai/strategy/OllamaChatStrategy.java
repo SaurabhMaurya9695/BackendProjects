@@ -1,5 +1,7 @@
 package com.backend.ai.springai.strategy;
 
+import reactor.core.publisher.Flux;
+
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.stereotype.Component;
@@ -25,5 +27,10 @@ public class OllamaChatStrategy implements ChatModelStrategy {
     @Override
     public String getModelName() {
         return "ollama";
+    }
+
+    @Override
+    public Flux<String> streamChat(String query) {
+        return chatClient.prompt(query).stream().content();
     }
 }

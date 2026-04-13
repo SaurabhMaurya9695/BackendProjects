@@ -27,7 +27,9 @@ public class TokenConsumedAdvisor implements CallAdvisor, StreamAdvisor {
     @Override
     public Flux<ChatClientResponse> adviseStream(ChatClientRequest chatClientRequest,
             StreamAdvisorChain streamAdvisorChain) {
-        return null;
+        _logger.info("TOKEN CONSUMER CALLED (stream)");
+        return streamAdvisorChain.nextStream(chatClientRequest)
+                .doOnComplete(() -> _logger.info("Stream completed"));
     }
 
     @Override
