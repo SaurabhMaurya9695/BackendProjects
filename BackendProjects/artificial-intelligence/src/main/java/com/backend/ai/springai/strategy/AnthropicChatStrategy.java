@@ -3,9 +3,16 @@ package com.backend.ai.springai.strategy;
 import reactor.core.publisher.Flux;
 import com.backend.ai.springai.advisor.TokenConsumedAdvisor;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
+import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
+import org.springframework.ai.document.Document;
+import org.springframework.ai.vectorstore.SearchRequest;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
 import org.springframework.ai.anthropic.AnthropicChatModel;
@@ -19,6 +26,7 @@ import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,7 +37,11 @@ import java.util.Map;
 public class AnthropicChatStrategy implements ChatModelStrategy {
 
     private final ChatClient chatClient;
-    private final MessageChatMemoryAdvisor memoryAdvisor;
+//    private final MessageChatMemoryAdvisor memoryAdvisor;
+
+    private final VectorStore _vectorStore;
+
+    private Logger _logger = LoggerFactory.getLogger(AnthropicChatStrategy.class);
 
     @Value("classpath:prompt/system-message.st")
     private Resource _system_message;
@@ -37,10 +49,15 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
     @Value("classpath:prompt/user-message.st")
     private Resource _user_message;
 
-    public AnthropicChatStrategy(AnthropicChatModel anthropicChatModel) {
+//    public AnthropicChatStrategy(AnthropicChatModel anthropicChatModel, JdbcChatMemoryRepository jdbcChatMemoryRepository) {
+//        this.chatClient = ChatClient.builder(anthropicChatModel).build();
+//        this.memoryAdvisor = MessageChatMemoryAdvisor.builder(
+//                MessageWindowChatMemory.builder().chatMemoryRepository(jdbcChatMemoryRepository).build()).build();
+//    }
+
+    public AnthropicChatStrategy(AnthropicChatModel anthropicChatModel, VectorStore vectorStore) {
         this.chatClient = ChatClient.builder(anthropicChatModel).build();
-        this.memoryAdvisor = MessageChatMemoryAdvisor.builder(
-                MessageWindowChatMemory.builder().build()).build();
+        this._vectorStore = vectorStore;
     }
 
     @Override
@@ -84,6 +101,8 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
             String renderMsg = promptTemplate.render(Map.of("techName", "SPRING", "exampleName", "SPRING BOOT"));
             Prompt prompt = new Prompt(renderMsg);
          */
+
+        /* USING MEMORY ADVISOR - FOR MORE COMMENT ABOVE CODE
         return this.chatClient
                 .prompt(query)
                 .advisors(
@@ -92,6 +111,33 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
                         new SimpleLoggerAdvisor(), // It will prints you req and repose
                         new SafeGuardAdvisor(new ArrayList<>(Collections.singleton("JAVA")))) // whatever the word inside this list will not be allowed by user
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
+                .call()
+                .content();
+         */
+
+
+        //USING RAG
+        // 1: get the smilier data from db
+        SearchRequest searchRequest = SearchRequest.builder()
+                .topK(1)
+                .query(query)
+                .similarityThreshold(0.5)
+                .build();
+
+        List<Document> documents = this._vectorStore.similaritySearch(searchRequest);
+
+        // retreive String/text from document list
+        assert documents != null;
+        List<String> documentsList = documents.stream().map(Document::getText).toList();
+        String contextData = String.join(",", documentsList);
+
+        _logger.info("prompt : {}", contextData);
+        return this.chatClient
+                .prompt()
+                .advisors(new SimpleLoggerAdvisor())
+                .system(
+                        promptSystemSpec -> promptSystemSpec.text(this._system_message).param("documents", contextData))
+                .user(promptUserSpec -> promptUserSpec.text(this._user_message).param("query",query))
                 .call()
                 .content();
     }
@@ -107,7 +153,7 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
                 .prompt()
                 .system(system -> system.text(this._system_message))
                 .user(user -> user.text(this._user_message).param("concepts", query))
-                .advisors(memoryAdvisor)
+//                .advisors(memoryAdvisor)
                 .advisors(a -> a.param(ChatMemory.CONVERSATION_ID, conversationId))
                 .stream()
                 .content();

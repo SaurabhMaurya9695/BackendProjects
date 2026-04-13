@@ -31,6 +31,46 @@ services:
       - OLLAMA_HOST=http://ollama:11434
     restart: no
 
+  mysql:
+    image: mysql:8.0
+    container_name: ai-mysql
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: ai_chat
+    volumes:
+      - mysql_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "-proot" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
+  mariadb:
+    image: mariadb:11.8
+    container_name: ai-mariadb
+    ports:
+      - "3308:3306"
+    environment:
+      MARIADB_ROOT_PASSWORD: mariadb
+      MARIADB_DATABASE: ai_vectors
+    volumes:
+      - mariadb_data:/var/lib/mysql
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "healthcheck.sh", "--connect", "--innodb_initialized" ]
+      interval: 15s
+      timeout: 10s
+      retries: 10
+      start_period: 30s
+
 volumes:
   ollama_data:
     name: ollama_data
+  mysql_data:
+    name: ai_mysql_data
+  mariadb_data:
+    name: ai_mariadb_data

@@ -1,6 +1,17 @@
 spring:
   application:
     name: Artificial-Intelligence
+
+  datasource:
+#    url: jdbc:mysql://localhost:3307/ai_chat   # MySQL — chat memory
+#    username: root
+#    password: root
+#    driver-class-name: com.mysql.cj.jdbc.Driver
+
+    url: jdbc:mariadb://localhost:3308/ai_vectors
+    username: root
+    password: mariadb
+
   ai:
     # --- Anthropic Claude ---
     anthropic:
@@ -14,11 +25,24 @@ spring:
       base-url: http://localhost:11434
       chat:
         model: deepseek-coder:1.3b
+      embedding:
+        model: nomic-embed-text  # embedding model for vector store
+
+    # --- MariaDB Vector Store ---
+    vectorstore:
+      mariadb:
+        initialize-schema: true        # auto-creates vector table on startup
+        dimensions: 768                # nomic-embed-text produces 768-dim vectors
+        distance-type: COSINE          # COSINE similarity for semantic search
 
     # This is off the automatic bean creation, it means we need to provide the impl for ChatClient for every AI
     chat:
       client:
         enabled: false
+#      memory:
+#        repository:
+#          jdbc:
+#            initialize-schema: never  # schema created manually — MySQL has no built-in schema in Spring AI 1.0.0
 server:
   port: 2026
 logging:
