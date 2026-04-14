@@ -11,6 +11,10 @@ import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.generation.augmentation.ContextualQueryAugmenter;
+import org.springframework.ai.rag.preretrieval.query.expansion.MultiQueryExpander;
+import org.springframework.ai.rag.preretrieval.query.transformation.RewriteQueryTransformer;
+import org.springframework.ai.rag.retrieval.join.ConcatenationDocumentJoiner;
 import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
@@ -145,19 +149,54 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
          */
 
         // USING RAG ADVISOR
+        /*
+            RetrievalAugmentationAdvisor retrievalAugmentationAdvisor = RetrievalAugmentationAdvisor.builder()
+                    .documentRetriever(
+                            VectorStoreDocumentRetriever.builder()
+                            .topK(3)
+                            .vectorStore(_vectorStore)
+                            .similarityThreshold(0.5)
+                            .build())
+                    .build();
+            _logger.info("retrievalAugmentationAdvisor : {}", retrievalAugmentationAdvisor);
+            return this.chatClient
+                    .prompt()
+                    .advisors(retrievalAugmentationAdvisor, new SimpleLoggerAdvisor())
+                    .user(promptUserSpec -> promptUserSpec.text(this._user_message).param("query",query))
+                    .call()
+                    .content();
+         */
+
+        // ADVANCE RAG ALGO - pre, middle,post
         RetrievalAugmentationAdvisor retrievalAugmentationAdvisor = RetrievalAugmentationAdvisor.builder()
+                .queryTransformers(
+                        RewriteQueryTransformer.builder()
+                                .chatClientBuilder(
+                                        chatClient.mutate()
+                                                .clone()
+                                ).build()
+                )
+                .queryExpander(
+                        MultiQueryExpander.builder()
+                                .chatClientBuilder(chatClient.mutate().clone())
+                                .build()
+                )
                 .documentRetriever(
                         VectorStoreDocumentRetriever.builder()
-                        .topK(3)
-                        .vectorStore(_vectorStore)
-                        .similarityThreshold(0.5)
-                        .build())
+                                .topK(3)
+                                .vectorStore(_vectorStore)
+                                .similarityThreshold(0.5)
+                                .build()
+                )
+                .documentJoiner(new ConcatenationDocumentJoiner())
+                .queryAugmenter(ContextualQueryAugmenter.builder().build())
                 .build();
-        _logger.info("retrievalAugmentationAdvisor : {}", retrievalAugmentationAdvisor);
+
+
         return this.chatClient
                 .prompt()
-                .advisors(retrievalAugmentationAdvisor, new SimpleLoggerAdvisor())
-                .user(promptUserSpec -> promptUserSpec.text(this._user_message).param("query",query))
+                .advisors(new SimpleLoggerAdvisor(),retrievalAugmentationAdvisor)
+                .user(query)
                 .call()
                 .content();
     }
