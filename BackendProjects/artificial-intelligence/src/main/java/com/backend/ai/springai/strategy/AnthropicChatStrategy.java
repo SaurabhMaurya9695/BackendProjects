@@ -10,6 +10,8 @@ import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
 import org.springframework.ai.chat.memory.repository.jdbc.JdbcChatMemoryRepository;
 import org.springframework.ai.document.Document;
+import org.springframework.ai.rag.advisor.RetrievalAugmentationAdvisor;
+import org.springframework.ai.rag.retrieval.search.VectorStoreDocumentRetriever;
 import org.springframework.ai.vectorstore.SearchRequest;
 import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -115,7 +117,7 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
                 .content();
          */
 
-
+        /*
         //USING RAG
         // 1: get the smilier data from db
         SearchRequest searchRequest = SearchRequest.builder()
@@ -137,6 +139,24 @@ public class AnthropicChatStrategy implements ChatModelStrategy {
                 .advisors(new SimpleLoggerAdvisor())
                 .system(
                         promptSystemSpec -> promptSystemSpec.text(this._system_message).param("documents", contextData))
+                .user(promptUserSpec -> promptUserSpec.text(this._user_message).param("query",query))
+                .call()
+                .content();
+         */
+
+        // USING RAG ADVISOR
+        RetrievalAugmentationAdvisor retrievalAugmentationAdvisor = RetrievalAugmentationAdvisor.builder()
+                .documentRetriever(
+                        VectorStoreDocumentRetriever.builder()
+                        .topK(3)
+                        .vectorStore(_vectorStore)
+                        .similarityThreshold(0.5)
+                        .build())
+                .build();
+        _logger.info("retrievalAugmentationAdvisor : {}", retrievalAugmentationAdvisor);
+        return this.chatClient
+                .prompt()
+                .advisors(retrievalAugmentationAdvisor, new SimpleLoggerAdvisor())
                 .user(promptUserSpec -> promptUserSpec.text(this._user_message).param("query",query))
                 .call()
                 .content();
