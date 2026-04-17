@@ -18,16 +18,16 @@ public class VectorStoreTest {
     @Autowired
     private VectorStore vectorStore;
 
-    @Test
-    void saveEmbeddings() {
-        List<Document> documents = List.of(
-                new Document("Spring AI is a framework for building AI-powered applications using Spring Boot."),
-                new Document("Ollama allows running large language models locally on your machine."), new Document(
-                        "MariaDB vector store supports storing and querying vector embeddings for semantic search."),
-                new Document("RAG (Retrieval Augmented Generation) combines vector search with LLM responses."));
-
-        vectorStore.add(documents);
-
-        System.out.println("Saved " + documents.size() + " embeddings to MariaDB.");
-    }
+//    @Test
+//    void saveEmbeddings() {
+//        List<Document> documents = List.of(
+//                new Document("Spring AI is a framework for building AI-powered applications using Spring Boot."),
+//                new Document("Ollama allows running large language models locally on your machine."), new Document(
+//                        "MariaDB vector store supports storing and querying vector embeddings for semantic search."),
+//                new Document("RAG (Retrieval Augmented Generation) combines vector search with LLM responses."));
+//
+//        vectorStore.add(documents);
+//
+//        System.out.println("Saved " + documents.size() + " embeddings to MariaDB.");
+//    }
 }

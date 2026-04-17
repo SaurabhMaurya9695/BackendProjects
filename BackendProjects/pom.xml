@@ -20,6 +20,7 @@
         <module>dsa</module>
         <module>xjc-plugin</module>
         <module>artificial-intelligence</module>
+        <module>ai-helpdesk</module>
     </modules>
 
     <!-- Dependencies -->

@@ -1,0 +1,30 @@
+spring:
+  application:
+    name: "AI-HelpDesk"
+  datasource:
+    url: jdbc:mysql://localhost:3307/helpdeskDb
+    username: root
+    password: root
+    driver-class-name: com.mysql.cj.jdbc.Driver
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  ai:
+    # --- Anthropic Claude ---
+    anthropic:
+      api-key: ${ANTHROPIC_API_KEY}
+      chat:
+        options:
+          model: ${ANTHROPIC_MODEL}
+server:
+  port: 2027
+logging:
+  level:
+    org:
+      springframework:
+        ai:
+          chat:
+            client:
+              advisor: DEBUG
+
