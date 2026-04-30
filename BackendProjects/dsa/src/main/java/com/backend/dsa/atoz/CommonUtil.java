@@ -212,4 +212,33 @@ public class CommonUtil {
     public static void sortArray(int[] A) {
         Arrays.sort(A);
     }
+
+    public static int[] buildLPS(String s) {
+        int n = s.length();
+        int[] lps = new int[n];
+        int len = 0;
+        int i = 1;
+
+        while (i < n) {
+            char pref = s.charAt(len);
+            char suff = s.charAt(i);
+
+            if (pref == suff) {
+                // if both prefix and suffix matched then move length by 1 and stored in lps
+                // and move i as well
+                len++;
+                lps[i] = len;
+                i++;
+            } else {
+                // if not matched then check with prev
+                if (len != 0) {
+                    len = lps[len - 1];
+                } else {
+                    lps[i] = 0;
+                    i++;
+                }
+            }
+        }
+        return lps; // full filled LPS
+    }
 }
