@@ -4,10 +4,12 @@ import com.backend.dsa.atoz.trees.nAryTree.Node;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.PriorityQueue;
+import java.util.Set;
 
 public class CommonUtil {
 
@@ -240,5 +242,103 @@ public class CommonUtil {
             }
         }
         return lps; // full filled LPS
+    }
+
+    public static void display(int[][] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            for (int j = 0; j < arr[0].length; j++) {
+                System.out.print(arr[i][j] + " ");
+            }
+            System.out.println();
+        }
+        System.out.println();
+    }
+
+    public static void display(int[] arr) {
+        for (int i = 0; i < arr.length; i++) {
+            System.out.print(arr[i] + " ");
+        }
+        System.out.println();
+    }
+
+    public static void reverse(List<Integer> arr, int left, int right) {
+        while (left < right) {
+            int temp = arr.get(left);
+            arr.set(left, arr.get(right));
+            arr.set(right, temp);
+            left++;
+            right--;
+        }
+    }
+
+    public static boolean isPrime(int n) {
+        if (n == 1) {
+            return false;
+        }
+        if (n == 2 || n == 3 || n == 5) {
+            return true;
+        }
+
+        for (int i = 5; i <= n; i++) {
+            if (n % i == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public static Set<Integer> getPrimeFactors(int num) {
+        Set<Integer> factors = new HashSet<>();
+
+        // Check for factor 2
+        if (num % 2 == 0) {
+            factors.add(2);
+            while (num % 2 == 0) {
+                num /= 2;
+            }
+        }
+
+        // Check for odd factors from 3 onwards
+        for (int i = 3; i * i <= num; i += 2) {
+            if (num % i == 0) {
+                factors.add(i);
+                while (num % i == 0) {
+                    num /= i;
+                }
+            }
+        }
+
+        // If num > 1, then it's a prime factor
+        if (num > 1) {
+            factors.add(num);
+        }
+
+        return factors;
+    }
+
+    public static boolean[] sieveOfEratosthenes(int maxVal) {
+        boolean[] isPrime = new boolean[maxVal + 1];
+
+        // Initialize: assume all numbers are prime
+        for (int i = 0; i <= maxVal; i++) {
+            isPrime[i] = true;
+        }
+
+        // 0 and 1 are not prime
+        isPrime[0] = false;
+        isPrime[1] = false;
+
+        // Mark non-primes
+        for (int i = 2; i * i <= maxVal; i++) {
+            if (isPrime[i]) {
+                // Mark all multiples of i as not prime
+                for (int j = i * i; j <= maxVal; j += i) {
+                    isPrime[j] = false;
+                }
+            }
+        }
+
+        return isPrime;
     }
 }
