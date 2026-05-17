@@ -1,4 +1,4 @@
-package com.backend.dsa.atoz;
+package com.backend.dsa.atoz.binarySearch;
 
 import java.util.Arrays;
 
