@@ -2,9 +2,9 @@ package com.backend.dsa.atoz.graphs;
 
 public class Edge {
 
-    int src;
-    int nbr;
-    int wt;
+    public int src;
+    public int nbr;
+    public int wt;
 
     public Edge(int src, int nbr) {
         this.src = src;
