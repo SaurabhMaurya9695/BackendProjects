@@ -7,10 +7,15 @@ public class WaysToMakeAFairArray_02 {
 
     public static void main(String[] args) {
         int[] nums = { 2, 1, 6, 4 };
-        System.out.println(waysToMakeFair(nums));
+        System.out.println(waysToMakeFair_TLE(nums));
+//        System.out.println(waysToMakeFair_Optimized(nums));
     }
 
-    public static int waysToMakeFair(int[] nums) {
+//    private static int waysToMakeFair_Optimized(int[] nums) {
+//        //
+//    }
+
+    public static int waysToMakeFair_TLE(int[] nums) {
         int n = nums.length;
 
         // brute force - TLE
