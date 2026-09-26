@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package grpc.user;
+
+option java_package = "com.backend.grpc.services"; // Put the generated Java classes under this Java package.
+option java_multiple_files = true;  // instead of clubbing all file, java files sits in their own files
+
+message GetUserRequest {
+  int64 user_id = 1;
+}
+
+message User {
+  int64 id = 1;
+  string name = 2;
+  string email = 3;
+}
+
+service UserService {
+  rpc GetUser(GetUserRequest) returns (User);
+}

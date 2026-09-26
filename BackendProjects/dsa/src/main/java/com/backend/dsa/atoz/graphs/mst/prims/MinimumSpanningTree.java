@@ -1,4 +1,4 @@
-package com.backend.dsa.atoz.graphs.mst;
+package com.backend.dsa.atoz.graphs.mst.prims;
 
 import java.util.*;
 

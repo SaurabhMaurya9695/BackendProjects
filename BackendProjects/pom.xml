@@ -21,6 +21,7 @@
         <module>xjc-plugin</module>
         <module>artificial-intelligence</module>
         <module>ai-helpdesk</module>
+        <module>grpc</module>
     </modules>
 
     <!-- Dependencies -->
