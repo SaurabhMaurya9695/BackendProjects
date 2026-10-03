@@ -1,3 +1,5 @@
 {
-    "java.configuration.updateBuildConfiguration": "disabled"
+    "java.configuration.updateBuildConfiguration": "disabled",
+    "cph.language.cpp.Command": "/opt/homebrew/bin/g++-14",
+    "cph.language.cpp.Args": "-std=c++17 -O2"
 }

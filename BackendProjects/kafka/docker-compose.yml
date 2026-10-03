@@ -1,0 +1,40 @@
+services:
+  kafka:
+    image: apache/kafka:4.0.1
+    container_name: 2Octkafka
+    hostname: kafka
+
+    ports:
+      - "9092:9092"
+
+    environment:
+      # Kafka runs as both a broker and a controller.
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+
+      # Single-node KRaft controller quorum.
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+
+      # Kafka exposes:
+      # - 9092 for client applications
+      # - 9093 for controller communication
+      KAFKA_LISTENERS: PLAINTEXT://:9092,CONTROLLER://:9093
+
+      # Applications running on your host connect here.
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://localhost:9092
+
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+
+      # These are required because this is a single-broker environment.
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+
+      # Make consumer-group assignment happen immediately during learning.
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+
+volumes:
+  kafka-data:
