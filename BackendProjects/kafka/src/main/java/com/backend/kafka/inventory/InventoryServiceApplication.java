@@ -24,11 +24,14 @@ public class InventoryServiceApplication {
     private static final String INVENTORY_EVENTS_TOPIC = "inventory-events.v1";
     private static final String CONSUMER_GROUP = "inventory-service";
     private static final String TRANSACTIONAL_ID = "inventory-service-instance-1";
+    private static final String RETRY_TEST_ORDER_ID = "order-api-retry-001";
+    private static final int SIMULATED_FAILURES = 2;
 
     public static void main(String[] args) {
         ObjectMapper objectMapper = new ObjectMapper();
         InventoryStateStore stateStore = new InventoryStateStore(Path.of("inventory-state.json"));
         InventoryStateStore.InventoryState state = stateStore.load();
+        Map<String, Integer> attemptsByOrder = new HashMap<>();
 
         try (KafkaConsumer<String, String> consumer = new KafkaConsumer<>(
                 KafkaClientProperties.consumerProperties(CONSUMER_GROUP));
@@ -46,7 +49,7 @@ public class InventoryServiceApplication {
                 producer.beginTransaction();
                 try {
                     for (ConsumerRecord<String, String> record : records) {
-                        publishInventoryEvent(objectMapper, producer, record, state);
+                        publishInventoryEvent(objectMapper, producer, record, state, attemptsByOrder);
                     }
                     producer.sendOffsetsToTransaction(offsetsFor(records), consumer.groupMetadata());
                     producer.commitTransaction();
@@ -55,7 +58,8 @@ public class InventoryServiceApplication {
                 } catch (Exception exception) {
                     producer.abortTransaction();
                     state = stateStore.load();
-                    System.err.println("Kafka transaction aborted");
+                    rewindToBatchStart(consumer, records);
+                    System.err.println("Kafka transaction aborted; batch will be retried");
                     exception.printStackTrace();
                 }
             }
@@ -63,7 +67,14 @@ public class InventoryServiceApplication {
     }
 
     private static void publishInventoryEvent(ObjectMapper objectMapper, KafkaProducer<String, String> producer,
-            ConsumerRecord<String, String> record, InventoryStateStore.InventoryState state) throws Exception {
+            ConsumerRecord<String, String> record, InventoryStateStore.InventoryState state,
+            Map<String, Integer> attemptsByOrder) throws Exception {
+        int attempt = attemptsByOrder.merge(record.key(), 1, Integer::sum);
+        if (RETRY_TEST_ORDER_ID.equals(record.key()) && attempt <= SIMULATED_FAILURES) {
+            System.out.println("Simulated failure for " + record.key() + ", attempt " + attempt);
+            throw new RuntimeException("Simulated temporary failure");
+        }
+
         JsonNode orderEvent = objectMapper.readTree(record.value());
         String productId = orderEvent.path("productId").asText(null);
         int quantity = orderEvent.path("quantity").asInt(-1);
@@ -74,6 +85,16 @@ public class InventoryServiceApplication {
         boolean reserved = reserveInventory(state.availableStock(), productId, quantity);
         producer.send(new ProducerRecord<>(INVENTORY_EVENTS_TOPIC, record.key(),
                 createInventoryEvent(record, productId, quantity, reserved))).get();
+    }
+
+    private static void rewindToBatchStart(KafkaConsumer<String, String> consumer,
+            ConsumerRecords<String, String> records) {
+        Map<TopicPartition, Long> offsets = new HashMap<>();
+        for (TopicPartition partition : records.partitions()) {
+            offsets.put(partition, records.records(partition).get(0).offset());
+        }
+        consumer.seekToBeginning(offsets.keySet());
+        offsets.forEach(consumer::seek);
     }
 
     private static Map<TopicPartition, OffsetAndMetadata> offsetsFor(ConsumerRecords<String, String> records) {
