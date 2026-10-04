@@ -14,9 +14,9 @@ import org.apache.kafka.clients.producer.RecordMetadata;
 import java.nio.file.Path;
 import java.time.Duration;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
-import java.util.concurrent.Future;
 
 public class InventoryServiceApplication {
 
@@ -30,6 +30,7 @@ public class InventoryServiceApplication {
         InventoryStateStore.InventoryState savedState = stateStore.load();
         Map<String, Integer> availableStock = savedState.availableStock();
         Set<String> processedRecords = savedState.processedRecords();
+        List<InventoryStateStore.OutboxEvent> outbox = savedState.outbox();
 
         try (KafkaConsumer<String, String> inventoryConsumer = new KafkaConsumer<>(
                 KafkaClientProperties.consumerProperties(CONSUMER_GROUP));
@@ -39,8 +40,14 @@ public class InventoryServiceApplication {
             while (true) {
                 // 1 : Poll the records from Order Topic
                 ConsumerRecords<String, String> records = inventoryConsumer.poll(Duration.ofMillis(500));
+                try {
+                    publishPendingEvents(inventoryProducer, outbox, stateStore, availableStock, processedRecords);
+                } catch (Exception exception) {
+                    System.err.println("Failed to publish pending inventory event");
+                    exception.printStackTrace();
+                }
+
                 // 2 : Iterate through all records
-                boolean outputPublished = true;
                 for (ConsumerRecord<String, String> record : records) {
                     // 3 : Print all values of records
                     System.out.printf("Received record: topic=%s, partition=%d, offset=%d, key=%s, value=%s%n",
@@ -55,7 +62,6 @@ public class InventoryServiceApplication {
                     String productId = null;
                     int requestedQuantity = -1;
                     boolean inventoryReserved = false;
-                    boolean outputPublishedForRecord = false;
                     try {
                         // 3.1 - get the full json here
                         JsonNode orderEvent = objectMapper.readTree(record.value());
@@ -68,23 +74,19 @@ public class InventoryServiceApplication {
 
                         inventoryReserved = reserveInventory(availableStock, productId, requestedQuantity);
 
-                        // 4 : Created a producer record
                         String inventoryEventJson = createInventoryEvent(record, productId, requestedQuantity,
                                 inventoryReserved);
-                        ProducerRecord<String, String> inventoryEventRecord = new ProducerRecord<>(
-                                INVENTORY_EVENTS_TOPIC, record.key(), inventoryEventJson);
-
-                        // 5 : Send the event and wait for Kafka's result
-                        Future<RecordMetadata> sendResult = inventoryProducer.send(inventoryEventRecord);
-                        RecordMetadata metadata = sendResult.get();
-                        outputPublishedForRecord = true;
+                        outbox.add(new InventoryStateStore.OutboxEvent(
+                                "inventory-event-" + record.partition() + "-" + record.offset(), INVENTORY_EVENTS_TOPIC,
+                                record.key(), inventoryEventJson, InventoryStateStore.OutboxEvent.Status.PENDING));
                         markProcessed(processedRecords, record);
-                        stateStore.save(new InventoryStateStore.InventoryState(availableStock, processedRecords));
-                        System.out.printf("Inventory event published: topic=%s, partition=%d, offset=%d%n",
-                                metadata.topic(), metadata.partition(), metadata.offset());
+                        stateStore.save(
+                                new InventoryStateStore.InventoryState(availableStock, processedRecords, outbox));
+                        inventoryConsumer.commitSync();
+//                        throw new RuntimeException("Order event has been processed");
+                        publishPendingEvents(inventoryProducer, outbox, stateStore, availableStock, processedRecords);
                     } catch (Exception exception) {
-                        outputPublished = false;
-                        if (inventoryReserved && !outputPublishedForRecord) {
+                        if (inventoryReserved) {
                             releaseInventory(availableStock, productId, requestedQuantity);
                         }
                         System.err.println("Failed to process order " + record.key());
@@ -92,15 +94,28 @@ public class InventoryServiceApplication {
                         // Do not commit this batch.
                         break;
                     }
-
-                }
-
-                // 6 : with a successful transaction with all 1 - 5 we'll commit this msg
-                if (!records.isEmpty() && outputPublished) {
-                    inventoryConsumer.commitSync();
-                    System.out.println("Offsets committed");
                 }
             }
+        }
+    }
+
+    private static void publishPendingEvents(KafkaProducer<String, String> producer,
+            List<InventoryStateStore.OutboxEvent> outbox, InventoryStateStore stateStore,
+            Map<String, Integer> availableStock, Set<String> processedRecords) throws Exception {
+        for (int index = 0; index < outbox.size(); index++) {
+            InventoryStateStore.OutboxEvent event = outbox.get(index);
+            if (event.status() != InventoryStateStore.OutboxEvent.Status.PENDING) {
+                continue;
+            }
+
+            RecordMetadata metadata = producer.send(new ProducerRecord<>(event.topic(), event.key(), event.value()))
+                    .get();
+            outbox.set(index,
+                    new InventoryStateStore.OutboxEvent(event.eventId(), event.topic(), event.key(), event.value(),
+                            InventoryStateStore.OutboxEvent.Status.PUBLISHED));
+            stateStore.save(new InventoryStateStore.InventoryState(availableStock, processedRecords, outbox));
+            System.out.printf("Inventory event published: topic=%s, partition=%d, offset=%d%n", metadata.topic(),
+                    metadata.partition(), metadata.offset());
         }
     }
 
@@ -116,8 +131,7 @@ public class InventoryServiceApplication {
         processedRecords.add(recordIdentity(record));
     }
 
-    static boolean reserveInventory(Map<String, Integer> availableStock, String productId,
-            int requestedQuantity) {
+    static boolean reserveInventory(Map<String, Integer> availableStock, String productId, int requestedQuantity) {
         int currentQuantity = availableStock.getOrDefault(productId, 0);
         if (currentQuantity < requestedQuantity) {
             return false;
@@ -126,13 +140,12 @@ public class InventoryServiceApplication {
         return true;
     }
 
-    static void releaseInventory(Map<String, Integer> availableStock, String productId,
-            int requestedQuantity) {
+    static void releaseInventory(Map<String, Integer> availableStock, String productId, int requestedQuantity) {
         availableStock.merge(productId, requestedQuantity, Integer::sum);
     }
 
-    static String createInventoryEvent(ConsumerRecord<String, String> record, String productId,
-            int requestedQuantity, boolean inventoryReserved) {
+    static String createInventoryEvent(ConsumerRecord<String, String> record, String productId, int requestedQuantity,
+            boolean inventoryReserved) {
         String eventType = inventoryReserved ? "InventoryReserved" : "InventoryRejected";
 
         return "{\"eventId\":\"inventory-event-" + record.partition() + "-" + record.offset() + "\","

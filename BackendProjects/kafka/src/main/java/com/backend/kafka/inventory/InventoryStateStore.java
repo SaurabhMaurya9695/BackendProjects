@@ -8,7 +8,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardCopyOption;
 import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Objects;
 import java.util.Set;
@@ -67,7 +69,7 @@ public class InventoryStateStore {
     static InventoryState initialState() {
         Map<String, Integer> availableStock = new HashMap<>();
         availableStock.put(INITIAL_PRODUCT_ID, INITIAL_PRODUCT_QUANTITY);
-        return new InventoryState(availableStock, new HashSet<>());
+        return new InventoryState(availableStock, new HashSet<>(), new ArrayList<>());
     }
 
     private static void moveIntoPlace(Path temporaryFile, Path stateFile) throws IOException {
@@ -79,11 +81,21 @@ public class InventoryStateStore {
         }
     }
 
-    public record InventoryState(Map<String, Integer> availableStock, Set<String> processedRecords) {
+    public record InventoryState(Map<String, Integer> availableStock, Set<String> processedRecords,
+            List<OutboxEvent> outbox) {
 
         public InventoryState {
             availableStock = availableStock == null ? new HashMap<>() : new HashMap<>(availableStock);
             processedRecords = processedRecords == null ? new HashSet<>() : new HashSet<>(processedRecords);
+            outbox = outbox == null ? new ArrayList<>() : new ArrayList<>(outbox);
+        }
+    }
+
+    public record OutboxEvent(String eventId, String topic, String key, String value, Status status) {
+
+        public enum Status {
+            PENDING,
+            PUBLISHED
         }
     }
 
