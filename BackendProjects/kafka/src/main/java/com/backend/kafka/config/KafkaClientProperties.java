@@ -22,6 +22,12 @@ public final class KafkaClientProperties {
         return properties;
     }
 
+    public static Properties transactionalProducerProperties(String transactionalId) {
+        Properties properties = producerProperties();
+        properties.put(ProducerConfig.TRANSACTIONAL_ID_CONFIG, transactionalId);
+        return properties;
+    }
+
     public static Properties consumerProperties(String groupId) {
         Properties properties = new Properties();
         properties.put(ConsumerConfig.BOOTSTRAP_SERVERS_CONFIG, BOOTSTRAP_SERVERS);
@@ -30,6 +36,7 @@ public final class KafkaClientProperties {
         properties.put(ConsumerConfig.VALUE_DESERIALIZER_CLASS_CONFIG, StringDeserializer.class.getName());
         properties.put(ConsumerConfig.AUTO_OFFSET_RESET_CONFIG, "earliest");
         properties.put(ConsumerConfig.ENABLE_AUTO_COMMIT_CONFIG, "false");
+        properties.put(ConsumerConfig.ISOLATION_LEVEL_CONFIG, "read_committed");
         return properties;
     }
 }
